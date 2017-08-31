@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.awt.font.TextAttribute;
 import java.util.ArrayList;
@@ -33,6 +34,9 @@ public class AnnouncementFragment extends Fragment {
     // The main list/recycler view
     RecyclerView recyclerView;
 
+    // No announcement layout
+    LinearLayout noAnnouncementLayout;
+
     public AnnouncementFragment() {
         // Required empty public constructor
     }
@@ -48,6 +52,7 @@ public class AnnouncementFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_announcement, container, false);
 
+        noAnnouncementLayout = (LinearLayout) view.findViewById(R.id.no_announcement_layout);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.announcement_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -125,6 +130,9 @@ public class AnnouncementFragment extends Fragment {
         dbHelper.close();
         if (sampleAnnouncements == null){
             sampleAnnouncements = new ArrayList<>();
+            noAnnouncementLayout.setVisibility(View.VISIBLE);
+        } else {
+            noAnnouncementLayout.setVisibility(View.GONE);
         }
 
         AnnouncementAdapter announcementAdapter = new AnnouncementAdapter(sampleAnnouncements);
