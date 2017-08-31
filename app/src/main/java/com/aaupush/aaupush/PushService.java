@@ -106,11 +106,21 @@ public class PushService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        // Refresh announcements
-        refreshAnnouncements();
+        // Run the methods only if there is a connection
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager)getApplicationContext()
+                        .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        boolean isConnectedSuccess = networkInfo !=null && networkInfo.isConnected();
+        boolean isOnWiFi = (networkInfo != null ? networkInfo.getType() : 0) == ConnectivityManager.TYPE_WIFI;
+        boolean isOnData = (networkInfo != null ? networkInfo.getType() : 0) == ConnectivityManager.TYPE_MOBILE;
 
-        // Refresh Materials
-        refreshMaterials();
+
+        if (isConnectedSuccess && (isOnWiFi || isOnData)) {
+            refreshAnnouncements();
+            refreshMaterials();
+        }
+
 
         // Schedule for the service to run again
         setNextServiceRunAlarm();
