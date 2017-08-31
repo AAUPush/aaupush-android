@@ -45,6 +45,9 @@ public class PushService extends Service {
 
     private static final String TAG = "PushService";
 
+    // Interval the service should run on
+    private static final long SERVICE_REFRESH_MS = 600000;
+
     // RequestQueue for the whole application
     public RequestQueue requestQueue;
 
@@ -474,7 +477,7 @@ public class PushService extends Service {
 
         // Set the alarm // TODO: refresh time value to something greater
         alarmManager.set(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime() + 60000,
+                SystemClock.elapsedRealtime() + SERVICE_REFRESH_MS,
                 pIntent);
     }
 
