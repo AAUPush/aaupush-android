@@ -400,7 +400,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Cursor cursor = sqLiteDatabase.rawQuery(
                 "SELECT * FROM " + ANNOUNCEMENT_TABLE_NAME +
-                        " WHERE " + ANNOUNCEMENT_EXP_DATE + " < " + now +
+                        " WHERE " + ANNOUNCEMENT_EXP_DATE + " > " + now +
                         " ORDER BY " + ANNOUNCEMENT_PUB_DATE + " DESC",
                 null);
 
