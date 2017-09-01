@@ -537,7 +537,7 @@ public class PushService extends Service {
     static public Material downloadMaterial(Material material, Context context) {
         // URI String only for testing
         String localUri = "http://10.0.2.2/~djang/base.apk";
-        String onlineUri = "http://djang.tk/aaupush/api/sample.txt";
+        String onlineUri = "http://www.nybapps.tk/aaupush/api/sample.txt";
 
 
         // Get the download manager instance

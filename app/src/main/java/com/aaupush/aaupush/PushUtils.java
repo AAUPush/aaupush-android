@@ -46,13 +46,13 @@ public class PushUtils {
 
     // Online
     // Returns list of study fields
-    static final String URL_GET_STUDY_FIELDS = "http://djang.tk/aaupush/api/getStudyFields.php";
+    static final String URL_GET_STUDY_FIELDS = "http://www.nybapps.tk/aaupush/api/getStudyFields.php";
     // List of announcements
-    static final String URL_GET_ANNOUNCEMENTS = "http://djang.tk/aaupush/api/getAnnouncements.php?";
+    static final String URL_GET_ANNOUNCEMENTS = "http://www.nybapps.tk/aaupush/api/getAnnouncements.php?";
     // List of materials
-    static final String URL_GET_MATERIALS = "http://djang.tk/aaupush/api/getMaterials.php?";
+    static final String URL_GET_MATERIALS = "http://www.nybapps.tk/aaupush/api/getMaterials.php?";
     // List of courses withing a given study field
-    static final String URL_GET_COURSES = "http://djang.tk/aaupush/api/getCourses.php?";
+    static final String URL_GET_COURSES = "http://www.nybapps.tk/aaupush/api/getCourses.php?";
 
     // Folder name
     static final String ROOT_FOLDER = "AAUPush";
