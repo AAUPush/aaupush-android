@@ -40,6 +40,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class PushService extends Service {
 
@@ -193,6 +194,14 @@ public class PushService extends Service {
                         // Output the response to the log
                         Log.d(TAG, response.toString());
 
+                        // Save the current time as the last checked timestamp
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putLong(PushUtils.SP_ANNOUNCEMENT_LAST_CHECKED,
+                                Long.parseLong(
+                                        PushUtils.calendarToString(Calendar.getInstance(),
+                                                true)));
+                        editor.apply();
+
                         // Parse the JSON Array
                         try {
                             // Check if the array is not empty
@@ -250,7 +259,6 @@ public class PushService extends Service {
 
                                 // Save the ID of the last announcement
                                 if (i == response.length() - 1){
-                                    SharedPreferences.Editor editor = preferences.edit();
                                     editor.putInt(PushUtils.SP_LAST_ANNOUNCEMENT_RECEIVED_ID,
                                             json.getInt("id"));
                                     editor.apply();
@@ -370,6 +378,14 @@ public class PushService extends Service {
                     // Output the response
                     Log.d(TAG, response.toString());
 
+                    // Save the current time as the last checked timestamp
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putLong(PushUtils.SP_MATERIAL_LAST_CHECKED,
+                            Long.parseLong(
+                                    PushUtils.calendarToString(Calendar.getInstance(),
+                                            true)));
+                    editor.apply();
+
                     // Parse the JSON Array
                     try {
                         // Check if the array is not empty
@@ -405,7 +421,6 @@ public class PushService extends Service {
 
                             // Save the ID of the last material
                             if (i == response.length() - 1){
-                                SharedPreferences.Editor editor = preferences.edit();
                                 editor.putInt(PushUtils.SP_LAST_MATERIAL_RECEIVED_ID,
                                         json.getInt("id"));
                                 editor.apply();

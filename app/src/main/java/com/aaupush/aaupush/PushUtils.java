@@ -23,6 +23,8 @@ public class PushUtils {
     static final String SP_IS_MATERIAL_FRAGMENT_RUNNING = "is_material_fragment_running";
     static final String SP_NOTIFICATION_COUNTER = "notification_counter";
     static final String SP_LAST_MATERIAL_RECEIVED_ID = "last_material_id";
+    static final String SP_MATERIAL_LAST_CHECKED = "material_last_checked";
+    static final String SP_ANNOUNCEMENT_LAST_CHECKED = "announcement_last_checked";
 
     // BroadCast
     static final String NEW_ANNOUNCEMENT_BROADCAST = "com.aaupush.aaupush.NEW_ANNOUNCEMENT";
