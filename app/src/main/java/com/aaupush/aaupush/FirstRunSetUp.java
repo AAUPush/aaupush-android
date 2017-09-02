@@ -240,6 +240,8 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
                                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
+                // Disable Volley Cache
+                request.setShouldCache(false);
 
                 // Add the request to the request queue
                 requestQueue.add(request);
@@ -343,6 +345,8 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
                         DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
+        // Disable Volley Cache
+        request.setShouldCache(false);
 
         // Add request to request queue
         requestQueue.add(request);

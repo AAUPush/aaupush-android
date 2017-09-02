@@ -341,6 +341,8 @@ public class PushService extends Service {
                         DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
+        // Disable Volley Cache
+        request.setShouldCache(false);
 
         // Add the request to the request queue
         requestQueue.add(request);
@@ -496,6 +498,9 @@ public class PushService extends Service {
                 new DefaultRetryPolicy(60000,
                         DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        // Disable Volley Cache
+        request.setShouldCache(false);
 
         // Add the request to the request queue
         requestQueue.add(request);
