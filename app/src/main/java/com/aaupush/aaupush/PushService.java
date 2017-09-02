@@ -85,6 +85,10 @@ public class PushService extends Service {
                     refreshMaterials();
                 }
 
+            } else if (intent.getAction().equals(PushUtils.ANNOUNCEMENT_REFRESH_REQUEST_BROADCAST)) {
+                refreshAnnouncements();
+            } else if (intent.getAction().equals(PushUtils.MATERIAL_REFRESH_REQUEST_BROADCAST)) {
+                refreshMaterials();
             }
         }
     };
@@ -132,6 +136,8 @@ public class PushService extends Service {
         // Register broadcast receiver
         IntentFilter broadcastFilters = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         broadcastFilters.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        broadcastFilters.addAction(PushUtils.ANNOUNCEMENT_REFRESH_REQUEST_BROADCAST);
+        broadcastFilters.addAction(PushUtils.MATERIAL_REFRESH_REQUEST_BROADCAST);
         registerReceiver(broadcastReceiver, broadcastFilters);
 
         return START_STICKY;
@@ -201,6 +207,8 @@ public class PushService extends Service {
                                         PushUtils.calendarToString(Calendar.getInstance(),
                                                 true)));
                         editor.apply();
+
+                        sendBroadcast(new Intent(PushUtils.ANNOUNCEMENT_REFRESHED_BROADCAST));
 
                         // Parse the JSON Array
                         try {
@@ -313,6 +321,7 @@ public class PushService extends Service {
                             sendBroadcast(new Intent(PushUtils.NO_CONNECTION_BROADCAST));
                             errorMessage = "No Connection";
                         } else if (error instanceof TimeoutError) {
+                            sendBroadcast(new Intent(PushUtils.CONNECTION_TIMEOUT_BROADCAST));
                             errorMessage = "Server took too long to respond";
                         } else if (error instanceof ServerError) {
                             errorMessage = "The was a problem with the server";
@@ -385,6 +394,8 @@ public class PushService extends Service {
                                     PushUtils.calendarToString(Calendar.getInstance(),
                                             true)));
                     editor.apply();
+
+                    sendBroadcast(new Intent(PushUtils.MATERIAL_REFRESHED_BROADCAST));
 
                     // Parse the JSON Array
                     try {
@@ -466,6 +477,7 @@ public class PushService extends Service {
                     sendBroadcast(new Intent(PushUtils.NO_CONNECTION_BROADCAST));
                     errorMessage = "No Connection";
                 } else if (error instanceof TimeoutError) {
+                    sendBroadcast(new Intent(PushUtils.CONNECTION_TIMEOUT_BROADCAST));
                     errorMessage = "Server took too long to respond";
                 } else if (error instanceof ServerError) {
                     errorMessage = "The was a problem with the server";

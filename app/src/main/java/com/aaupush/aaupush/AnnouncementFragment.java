@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,6 +38,9 @@ public class AnnouncementFragment extends Fragment {
     // No announcement layout
     LinearLayout noAnnouncementLayout;
 
+    // Swipe refresh layout
+    SwipeRefreshLayout swipeRefreshLayout;
+
     public AnnouncementFragment() {
         // Required empty public constructor
     }
@@ -51,6 +55,20 @@ public class AnnouncementFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_announcement, container, false);
+
+        // Set up swipe refresh layout
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.announcement_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        getContext()
+                                .getApplicationContext()
+                                .sendBroadcast(
+                                new Intent(PushUtils.ANNOUNCEMENT_REFRESH_REQUEST_BROADCAST));
+                    }
+                }
+        );
 
         noAnnouncementLayout = (LinearLayout) view.findViewById(R.id.no_announcement_layout);
 
@@ -74,8 +92,20 @@ public class AnnouncementFragment extends Fragment {
             Log.d(TAG, intent.getAction() + " Broadcast Received");
             if (intent.getAction().equals(PushUtils.NEW_ANNOUNCEMENT_BROADCAST)){
                 setAdapter();
-            } else if (intent.getAction().equals(PushUtils.NO_CONNECTION_BROADCAST)) {
+
+                // Stop refreshing layout
+                swipeRefreshLayout.setRefreshing(false);
+
+            } else if (intent.getAction().equals(PushUtils.NO_CONNECTION_BROADCAST)
+                    || intent.getAction().equals(PushUtils.CONNECTION_TIMEOUT_BROADCAST)) {
                 Snackbar.make(getView(), "Connection Error", Snackbar.LENGTH_LONG).show();
+
+                // Stop refreshing layout
+                swipeRefreshLayout.setRefreshing(false);
+
+            } else if (intent.getAction().equals(PushUtils.ANNOUNCEMENT_REFRESHED_BROADCAST)) {
+                // Stop refreshing layout
+                swipeRefreshLayout.setRefreshing(false);
             }
         }
     };
@@ -87,6 +117,8 @@ public class AnnouncementFragment extends Fragment {
         // Register BroadcastReceiver
         IntentFilter broadcastFilter = new IntentFilter(PushUtils.NEW_ANNOUNCEMENT_BROADCAST);
         broadcastFilter.addAction(PushUtils.NO_CONNECTION_BROADCAST);
+        broadcastFilter.addAction(PushUtils.CONNECTION_TIMEOUT_BROADCAST);
+        broadcastFilter.addAction(PushUtils.ANNOUNCEMENT_REFRESHED_BROADCAST);
         getActivity().registerReceiver(broadcastReceiver, broadcastFilter);
 
         // The SharedPreferences value is updated every time the fragment resumes

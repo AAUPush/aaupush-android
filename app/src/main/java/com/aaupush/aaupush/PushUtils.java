@@ -34,6 +34,11 @@ public class PushUtils {
     static final String MATERIAL_DOWNLOAD_STARTED_BROADCAST = "com.aaupush.aaupush.MATERIAL_DOWNLOAD_STARTED";
     static final String MATERIAL_DOWNLOAD_COMPLETED_BROADCAST = "com.aaupush.aaupush.MATERIAL_DOWNLOAD_COMPLETED";
     static final String NO_CONNECTION_BROADCAST = "com.aaupush.aaupush.NO_CONNECTION";
+    static final String CONNECTION_TIMEOUT_BROADCAST = "com.aaupush.aaupush.CONNECTION_TIMEOUT";
+    static final String ANNOUNCEMENT_REFRESHED_BROADCAST = "com.aaupush.aaupush.ANNOUNCEMENT_REFRESHED";
+    static final String MATERIAL_REFRESHED_BROADCAST = "com.aaupush.aaupush.MATERIAL_REFRESHED";
+    static final String ANNOUNCEMENT_REFRESH_REQUEST_BROADCAST = "com.aaupush.aaupush.ANNOUNCEMENT_REFRESH_REQUEST_BROADCAST";
+    static final String MATERIAL_REFRESH_REQUEST_BROADCAST = "com.aaupush.aaupush.MATERIAL_REFRESH_REQUEST_BROADCAST";
 
     /*// API Request URLs
     // Local

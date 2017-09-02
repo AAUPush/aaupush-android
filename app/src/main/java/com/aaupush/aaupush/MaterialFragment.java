@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -57,6 +58,9 @@ public class MaterialFragment extends Fragment {
     // Empty folder layout
     LinearLayout emptyFolderLayout;
 
+    // Swipe refresh layout
+    SwipeRefreshLayout swipeRefreshLayout;
+
     static MaterialFragment newInstance() {
         return new MaterialFragment();
     }
@@ -74,6 +78,20 @@ public class MaterialFragment extends Fragment {
 
         // Link the recycler view
         recyclerView = (RecyclerView) view.findViewById(R.id.material_recycler_view);
+
+        // Set up swipe refresh layout
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.material_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        getContext()
+                                .getApplicationContext()
+                                .sendBroadcast(
+                                        new Intent(PushUtils.MATERIAL_REFRESH_REQUEST_BROADCAST));
+                    }
+                }
+        );
 
         // Link the empty folder layout
         emptyFolderLayout = (LinearLayout) view.findViewById(R.id.no_file_folder_layout);
@@ -101,6 +119,8 @@ public class MaterialFragment extends Fragment {
         broadcastFilter.addAction(PushUtils.MATERIAL_DOWNLOAD_STARTED_BROADCAST);
         broadcastFilter.addAction(PushUtils.MATERIAL_DOWNLOAD_COMPLETED_BROADCAST);
         broadcastFilter.addAction(PushUtils.NO_CONNECTION_BROADCAST);
+        broadcastFilter.addAction(PushUtils.CONNECTION_TIMEOUT_BROADCAST);
+        broadcastFilter.addAction(PushUtils.MATERIAL_REFRESHED_BROADCAST);
         getActivity().registerReceiver(broadcastReceiver, broadcastFilter);
 
         // The SharedPreferences value is updated every time the fragment resumes
@@ -217,6 +237,9 @@ public class MaterialFragment extends Fragment {
                 // refresh the adapter
                 setAdapter();
 
+                // Stop refreshing layout
+                swipeRefreshLayout.setRefreshing(false);
+
             } else if (intent.getAction().equals(PushUtils.ON_FOLDER_CLICK_BROADCAST)) {
                 int courseId = intent.getIntExtra(INTENT_EXTRA_COURSE_ID, 0);
 
@@ -239,8 +262,15 @@ public class MaterialFragment extends Fragment {
                         selectedCourse != -1) {
                     setCourseAdapter(selectedCourse);
                 }
-            } else if (intent.getAction().equals(PushUtils.NO_CONNECTION_BROADCAST)) {
+            } else if (intent.getAction().equals(PushUtils.NO_CONNECTION_BROADCAST)
+                    || intent.getAction().equals(PushUtils.CONNECTION_TIMEOUT_BROADCAST)) {
                 Snackbar.make(getView(), "Connection Error", Snackbar.LENGTH_LONG).show();
+
+                // Stop refreshing layout
+                swipeRefreshLayout.setRefreshing(false);
+            } else if (intent.getAction().equals(PushUtils.MATERIAL_REFRESHED_BROADCAST)) {
+                // Stop refreshing layout
+                swipeRefreshLayout.setRefreshing(false);
             }
         }
     };
