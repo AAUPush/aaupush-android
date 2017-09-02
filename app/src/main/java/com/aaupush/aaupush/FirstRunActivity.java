@@ -13,11 +13,6 @@ public class FirstRunActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_run);
 
-        // hide the action bar
-        if (getSupportActionBar() != null){
-            getSupportActionBar().hide();
-        }
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.first_run_activity);
         if (fragment == null){
