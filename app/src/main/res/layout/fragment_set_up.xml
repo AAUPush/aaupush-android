@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/push_background"
+    android:background="@color/colorPrimaryDark"
     tools:context="com.aaupush.aaupush.FirstRunSetUp">
 
     <LinearLayout
@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"></LinearLayout>
+            android:layout_height="24dp"></LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
