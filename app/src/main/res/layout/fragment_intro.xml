@@ -28,18 +28,5 @@
         android:layout_marginBottom="143dp" />
 
 
-    <Button
-        android:id="@+id/lecturer_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="LECTURER LOGIN"
-        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
 
 </RelativeLayout>
