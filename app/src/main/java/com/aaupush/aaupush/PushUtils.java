@@ -13,19 +13,19 @@ import java.util.Locale;
 public class PushUtils {
 
     // SharedPreferences Constants
-    static final String SP_KEY_NAME = "aau_push_pref";   // SharedPreferences name
-    static final String SP_IS_FIRST_RUN = "is_first_run";
-    static final String SP_SELECTED_YEAR = "selected_year";
-    static final String SP_SELECTED_SECTION = "selected_section";
-    static final String SP_LAST_ANNOUNCEMENT_RECEIVED_ID = "last_announcement_id";
-    static final String SP_STUDY_FIELD_CODE = "study_field_code";
-    static final String SP_IS_ANNOUNCEMENT_FRAGMENT_RUNNING = "is_announcement_fragment_running";
-    static final String SP_IS_MATERIAL_FRAGMENT_RUNNING = "is_material_fragment_running";
-    static final String SP_NOTIFICATION_COUNTER = "notification_counter";
-    static final String SP_LAST_MATERIAL_RECEIVED_ID = "last_material_id";
-    static final String SP_MATERIAL_LAST_CHECKED = "material_last_checked";
-    static final String SP_ANNOUNCEMENT_LAST_CHECKED = "announcement_last_checked";
-    static final String SP_SECTION_CODE = "section_code";
+    public static final String SP_KEY_NAME = "aau_push_pref";   // SharedPreferences name
+    public static final String SP_IS_FIRST_RUN = "is_first_run";
+    public static final String SP_SELECTED_YEAR = "selected_year";
+    public static final String SP_SELECTED_SECTION = "selected_section";
+    public static final String SP_LAST_ANNOUNCEMENT_RECEIVED_ID = "last_announcement_id";
+    public static final String SP_STUDY_FIELD_CODE = "study_field_code";
+    public static final String SP_IS_ANNOUNCEMENT_FRAGMENT_RUNNING = "is_announcement_fragment_running";
+    public static final String SP_IS_MATERIAL_FRAGMENT_RUNNING = "is_material_fragment_running";
+    public static final String SP_NOTIFICATION_COUNTER = "notification_counter";
+    public static final String SP_LAST_MATERIAL_RECEIVED_ID = "last_material_id";
+    public static final String SP_MATERIAL_LAST_CHECKED = "material_last_checked";
+    public static final String SP_ANNOUNCEMENT_LAST_CHECKED = "announcement_last_checked";
+    public static final String SP_SECTION_CODE = "section_code";
 
     // BroadCast
     static final String NEW_ANNOUNCEMENT_BROADCAST = "com.aaupush.aaupush.NEW_ANNOUNCEMENT";
@@ -48,11 +48,11 @@ public class PushUtils {
     // List of announcements
     public static final String URL_GET_ANNOUNCEMENTS = "http://10.0.2.2/~djang/aaupush/api/getAnnouncements.php?";
     // List of materials
-    static final String URL_GET_MATERIALS = "http://10.0.2.2/~djang/aaupush/api/getMaterials.php?";
+    public static final String URL_GET_MATERIALS = "http://10.0.2.2/~djang/aaupush/api/getMaterials.php?";
     // List of courses withing a given study field
-    static final String URL_GET_COURSES = "http://10.0.2.2/~djang/aaupush/api/getCourses.php?";
+    public static final String URL_GET_COURSES = "http://10.0.2.2/~djang/aaupush/api/getCourses.php?";
     // Check if a given section exists
-    static final String URL_SECTION_EXISTS = "http://10.0.2.2:8000/api/section_exists/?";
+    public static final String URL_SECTION_EXISTS = "http://10.0.2.2:8000/api/section_exists/?";
 
     /*// Online
     // Returns list of study fields
@@ -65,7 +65,7 @@ public class PushUtils {
     static final String URL_GET_COURSES = "http://www.nybapps.tk/aaupush/api/getCourses.php?";*/
 
     // Folder name
-    static final String ROOT_FOLDER = "AAUPush";
+    public static final String ROOT_FOLDER = "AAUPush";
 
 
     /**
