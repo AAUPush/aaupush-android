@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/colorPrimaryDark"
     tools:context="com.aaupush.aaupush.FirstRunSetUp">
@@ -36,79 +37,26 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <android.support.design.widget.TextInputLayout
             android:id="@+id/year_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:padding="24dp"
             android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            app:counterMaxLength="1"
+            app:counterEnabled="true">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SELECT YEAR"
-                android:layout_marginBottom="8dp"/>
-
-            <RadioGroup
-                android:id="@+id/year_rg"
+            <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:inputType="number"
+                android:hint="@string/year_input_hint"/>
 
-                <RadioButton
-                    android:id="@+id/year_option_1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:button="@null"
-                    android:background="@drawable/toggle_background"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="#b9ffffff"
-                    android:text="1" />
+        </android.support.design.widget.TextInputLayout>
 
-                <RadioButton
-                    android:id="@+id/year_option_2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:button="@null"
-                    android:background="@drawable/toggle_background"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="#b9ffffff"
-                    android:text="2" />
-
-                <RadioButton
-                    android:id="@+id/year_option_3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:button="@null"
-                    android:background="@drawable/toggle_background"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="#b9ffffff"
-                    android:text="3" />
-
-                <RadioButton
-                    android:id="@+id/year_option_4"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:button="@null"
-                    android:background="@drawable/toggle_background"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="#b9ffffff"
-                    android:text="4" />
-            </RadioGroup>
-        </LinearLayout>
-
-        <LinearLayout
+        <android.support.design.widget.TextInputLayout
             android:id="@+id/section_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -116,58 +64,17 @@
             android:padding="24dp"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            app:counterMaxLength="1"
+            app:counterEnabled="true">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SELECT SECTION"
-                android:layout_marginBottom="8dp"/>
-
-            <RadioGroup
-                android:id="@+id/section_rg"
+            <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:inputType="number"
+                android:hint="@string/section_input_hint"/>
 
-                <RadioButton
-                    android:id="@+id/section_toggle_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:button="@null"
-                    android:background="@drawable/toggle_background"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="#b9ffffff"
-                    android:text="1" />
-
-                <RadioButton
-                    android:id="@+id/section_toggle_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:button="@null"
-                    android:background="@drawable/toggle_background"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="#b9ffffff"
-                    android:text="2" />
-
-                <RadioButton
-                    android:id="@+id/section_toggle_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:button="@null"
-                    android:background="@drawable/toggle_background"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="#b9ffffff"
-                    android:text="3" />
-
-            </RadioGroup>
-        </LinearLayout>
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/next_button"

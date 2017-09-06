@@ -14,4 +14,8 @@
     This is an announcementThis is an announcementThis is an announcementThis is an announcement
     This is an announcementThis is an announcementThis is an announcement</string>
     <string name="select_study_field">Select Study Field</string>
+    <string name="year_CAPS">YEAR</string>
+    <string name="section_CAPS">SECTION</string>
+    <string name="year_input_hint">Year(1, 2, 3…)</string>
+    <string name="section_input_hint">Section(1, 2, 3…)</string>
 </resources>

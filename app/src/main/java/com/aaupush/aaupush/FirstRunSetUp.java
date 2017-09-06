@@ -10,8 +10,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +38,7 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -44,14 +48,14 @@ import org.json.JSONObject;
 import java.io.File;
 import java.security.Permission;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.ServiceConfigurationError;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelectedListener,
-        RadioGroup.OnCheckedChangeListener{
+public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelectedListener{
 
     RequestQueue requestQueue;
 
@@ -68,6 +72,10 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
 
+    // Edit text layouts
+    TextInputLayout sectionInputLayout;
+    TextInputLayout yearInputLayout;
+
     // Main view
     View view;
 
@@ -81,7 +89,7 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_set_up, container, false);
@@ -89,6 +97,26 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
         // Init SharedPreferences and Editor
         preferences = getContext().getSharedPreferences(PushUtils.SP_KEY_NAME, Context.MODE_PRIVATE);
         editor = preferences.edit();
+
+        // TextInputLayout
+        sectionInputLayout = (TextInputLayout) view.findViewById(R.id.section_layout);
+        yearInputLayout = (TextInputLayout) view.findViewById(R.id.year_layout);
+        sectionInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                view.findViewById(R.id.next_button).setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         // Loading layout
         loadingForeground = (LinearLayout) view.findViewById(R.id.loading_foreground);
@@ -100,103 +128,83 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
         studyFieldSpinner.setOnItemSelectedListener(this);
         setStudyFieldAdapter();
 
-        // Init RadioGroups and set OnChange Listeners
-        RadioGroup yearRg = (RadioGroup) view.findViewById(R.id.year_rg);
-        yearRg.setOnCheckedChangeListener(this);
-
-        RadioGroup sectionRg = (RadioGroup) view.findViewById(R.id.section_rg);
-        sectionRg.setOnCheckedChangeListener(this);
-
         final Button nextBtn = (Button) view.findViewById(R.id.next_button);
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
 
                 // Show the loading layout/progress bar
                 loadingForeground.setVisibility(View.VISIBLE);
 
                 // TODO: Check if correct section and year are selected
+                String enteredSection = sectionInputLayout.getEditText()
+                        .getText().toString().replaceAll(" ", "");
+                String enteredYear = yearInputLayout.getEditText()
+                        .getText().toString().replaceAll(" ", "");
+
+                Log.d(TAG, "Section " + enteredSection);
+                Log.d(TAG, "Year " + enteredYear);
+
+
+                if (enteredSection.equals("") || enteredYear.equals("")) {
+                    if (enteredSection.equals("")) {
+                        sectionInputLayout.setError("Enter a number.");
+                    }
+
+                    if (enteredYear.equals("")) {
+                        yearInputLayout.setError("Enter a number.");
+                    }
+
+                    loadingForeground.setVisibility(View.GONE);
+                    return;
+                }
+
+                try {
+                    Integer.parseInt(enteredSection);
+                    Integer.parseInt(enteredYear);
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), "Enter a valid number", Toast.LENGTH_SHORT).show();
+                    loadingForeground.setVisibility(View.GONE);
+                    return;
+                }
 
                 // Get the list of course and add them to the db
                 // Build the request URL
-                String url = PushUtils.URL_GET_COURSES;
+                String url = PushUtils.URL_SECTION_EXISTS;
 
                 // Get the study field of the student
                 String studyField = preferences.getString(PushUtils.SP_STUDY_FIELD_CODE, "CS");
+
+                // Build Section code
+                String sectionCode = String.format(Locale.ENGLISH, "%sY%sS%s", studyField.toUpperCase(), enteredYear, enteredSection);
+
+                editor.putString(PushUtils.SP_SECTION_CODE, sectionCode);
+                editor.apply();
 
                 // Year of the student
                 final int year = preferences.getInt(PushUtils.SP_SELECTED_YEAR, 1);
 
                 // Append GET parameters
-                url = PushUtils.appendGetParameter("year", year + "", url);
-                url = PushUtils.appendGetParameter("study_field_code", studyField, url);
+                url = PushUtils.appendGetParameter("section_code", sectionCode, url);
 
                 // Build the json array request
-                JsonArrayRequest request = new JsonArrayRequest(
+                StringRequest request = new StringRequest(
                         url,
-                        new Response.Listener<JSONArray>() {
+                        new Response.Listener<String>() {
                             @Override
-                            public void onResponse(JSONArray response) {
+                            public void onResponse(String response) {
                                 // Output the response to log
-                                Log.d(TAG, response.toString());
-
-                                // Parse the JSON Array
-                                try {
-                                    // Check if the array is not empty
-                                    if (response.length() < 1){
-                                        Log.d(TAG, "CourseRequest returned empty JSON Array");
-                                        // TODO: Show message about empty course list
-                                        return; // Exit if array is empty
-                                    }
-
-                                    // Create Y(year)S(section) folder
-                                    String yearFolder = "Y" + year;
-                                    // Create aaupush directory
-                                    File createFolder = new File(Environment.getExternalStorageDirectory(),
-                                            PushUtils.ROOT_FOLDER + "/" + yearFolder);
-                                    if (!createFolder.exists()) {
-                                        createFolder.mkdirs();
-                                    }
-
-                                    // Init DB Object
-                                    DBHelper dbHelper = new DBHelper(getContext().getApplicationContext());
-
-                                    // Loop through the array and add each course to the db
-                                    for (int i = 0; i < response.length(); i++) {
-                                        // Get a JSON object from the array
-                                        JSONObject json = (JSONObject) response.get(i);
-
-                                        // Add the course to the db
-                                        dbHelper.addCourse(
-                                                json.getInt("id"),
-                                                json.getString("name"),
-                                                json.getInt("year")
-                                        );
-
-                                        new File(Environment.getExternalStorageDirectory(),
-                                                PushUtils.ROOT_FOLDER + "/" +
-                                                        "Y" + json.getInt("year") + "/" +
-                                                        json.getString("name"))
-                                                .mkdirs();
-
-                                    }
-
-                                    // Close the db object
-                                    dbHelper.close();
-
-                                    // If all went well proceed to MainActivity
-                                    //Change is_first_run value in shared preferences
-                                    editor.putBoolean(PushUtils.SP_IS_FIRST_RUN, false);
-                                    editor.apply();
-
-                                    //Start MainActivity
-                                    startActivity(new Intent(getContext().getApplicationContext(),
-                                            MainActivity.class));
-                                    getActivity().finish();
-
-                                    } catch (JSONException exception){
-                                    exception.printStackTrace();
+                                if (response.equals("true")) {
+                                    // TODO: Go to course selection fragment
+                                    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    // Output error about year section combination not existing
+                                    Snackbar.make(view,
+                                            "The Year-Section combination you chose does not exist",
+                                            Snackbar.LENGTH_LONG).show();
+                                    loadingForeground.setVisibility(View.GONE);
                                 }
+
                             }
                         },
                         new Response.ErrorListener() {
@@ -281,9 +289,7 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
                                 studyFields.add(new StudyField(
                                         jsonStudyField.getInt("id"),
                                         jsonStudyField.getString("name"),
-                                        jsonStudyField.getString("code"),
-                                        jsonStudyField.getInt("years"),
-                                        jsonStudyField.getInt("sections")
+                                        jsonStudyField.getString("code")
                                 ));
                             }
                         } catch (JSONException exception){
@@ -361,60 +367,15 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
         editor.putString(PushUtils.SP_STUDY_FIELD_CODE, studyField.code);
         editor.apply();
 
-        // Reveal Year Year layout
+        // Reveal Year and Section layout
         this.view.findViewById(R.id.year_layout).setVisibility(View.VISIBLE);
+        this.view.findViewById(R.id.section_layout).setVisibility(View.VISIBLE);
 
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup radioGroup, int id) {
-        switch (radioGroup.getId()){
-            case R.id.year_rg:
-                int selectedYear = 0;
-                // Get the selected year and save it to shared preferences
-                if (id == R.id.year_option_1){
-                    selectedYear = 1;
-                } else if (id == R.id.year_option_2){
-                    selectedYear = 2;
-                } else if (id == R.id.year_option_3){
-                    selectedYear = 3;
-                } else if (id == R.id.year_option_4){
-                    selectedYear = 4;
-                }
-
-                // Save
-                editor.putInt(PushUtils.SP_SELECTED_YEAR, selectedYear);
-                editor.commit();
-
-                // Reveal Section Layout
-                this.view.findViewById(R.id.section_layout).setVisibility(View.VISIBLE);
-
-                break;
-            case R.id.section_rg:
-                int selectedSection = 0;
-                // Get the selected section and save it to shared preferences
-                if (id == R.id.section_toggle_1){
-                    selectedSection = 1;
-                } else if (id == R.id.section_toggle_2){
-                    selectedSection = 2;
-                } else if (id == R.id.section_toggle_3){
-                    selectedSection = 3;
-                }
-
-                // Save
-                editor.putInt(PushUtils.SP_SELECTED_SECTION, selectedSection);
-                editor.commit();
-
-                // Reveal next button
-                this.view.findViewById(R.id.next_button).setVisibility(View.VISIBLE);
-
-                break;
-        }
     }
 
 
@@ -444,15 +405,11 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
         int id;
         String name;
         String code;
-        int years;
-        int sections;
 
-        public StudyField(int id, String name, String code, int years, int sections) {
+        public StudyField(int id, String name, String code) {
             this.id = id;
             this.name = name;
             this.code = code;
-            this.years = years;
-            this.sections = sections;
         }
 
         @Override

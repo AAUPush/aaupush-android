@@ -25,6 +25,7 @@ public class PushUtils {
     static final String SP_LAST_MATERIAL_RECEIVED_ID = "last_material_id";
     static final String SP_MATERIAL_LAST_CHECKED = "material_last_checked";
     static final String SP_ANNOUNCEMENT_LAST_CHECKED = "announcement_last_checked";
+    static final String SP_SECTION_CODE = "section_code";
 
     // BroadCast
     static final String NEW_ANNOUNCEMENT_BROADCAST = "com.aaupush.aaupush.NEW_ANNOUNCEMENT";
@@ -40,18 +41,20 @@ public class PushUtils {
     static final String ANNOUNCEMENT_REFRESH_REQUEST_BROADCAST = "com.aaupush.aaupush.ANNOUNCEMENT_REFRESH_REQUEST_BROADCAST";
     static final String MATERIAL_REFRESH_REQUEST_BROADCAST = "com.aaupush.aaupush.MATERIAL_REFRESH_REQUEST_BROADCAST";
 
-    /*// API Request URLs
+    // API Request URLs
     // Local
     // Returns list of study fields
-    public static final String URL_GET_STUDY_FIELDS = "http://10.0.2.2/~djang/aaupush/api/getStudyFields.php";
+    public static final String URL_GET_STUDY_FIELDS = "http://10.0.2.2:8000/api/study_fields";
     // List of announcements
     public static final String URL_GET_ANNOUNCEMENTS = "http://10.0.2.2/~djang/aaupush/api/getAnnouncements.php?";
     // List of materials
     static final String URL_GET_MATERIALS = "http://10.0.2.2/~djang/aaupush/api/getMaterials.php?";
     // List of courses withing a given study field
-    static final String URL_GET_COURSES = "http://10.0.2.2/~djang/aaupush/api/getCourses.php?";*/
+    static final String URL_GET_COURSES = "http://10.0.2.2/~djang/aaupush/api/getCourses.php?";
+    // Check if a given section exists
+    static final String URL_SECTION_EXISTS = "http://10.0.2.2:8000/api/section_exists/?";
 
-    // Online
+    /*// Online
     // Returns list of study fields
     static final String URL_GET_STUDY_FIELDS = "http://www.nybapps.tk/aaupush/api/getStudyFields.php";
     // List of announcements
@@ -59,7 +62,7 @@ public class PushUtils {
     // List of materials
     static final String URL_GET_MATERIALS = "http://www.nybapps.tk/aaupush/api/getMaterials.php?";
     // List of courses withing a given study field
-    static final String URL_GET_COURSES = "http://www.nybapps.tk/aaupush/api/getCourses.php?";
+    static final String URL_GET_COURSES = "http://www.nybapps.tk/aaupush/api/getCourses.php?";*/
 
     // Folder name
     static final String ROOT_FOLDER = "AAUPush";
