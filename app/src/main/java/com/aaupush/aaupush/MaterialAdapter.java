@@ -16,7 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
 
 
@@ -102,7 +101,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public int getItemViewType(int position) {
         if (list.get(position) instanceof String){
             return TYPE_HEADER;
-        } else if (list.get(position) instanceof Folder){
+        } else if (list.get(position) instanceof Course){
             return TYPE_FOLDER;
         } else if (list.get(position) instanceof  Material){
             return TYPE_MATERIAL;
@@ -119,7 +118,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private void configureFolder(FolderViewHolder viewHolder, int position){
         // Get the folder from the list
-        Folder folder = (Folder) list.get(position);
+        Course folder = (Course) list.get(position);
 
         // Hide views that are only applicable for materials
         viewHolder.getDownloadOpenBtn().setVisibility(View.GONE);
@@ -337,7 +336,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         @Override
         public void onClick(View view) {
             // Get clicked folder id
-            Folder folder = (Folder)list.get(getAdapterPosition());
+            Course folder = (Course)list.get(getAdapterPosition());
             int folderId = folder.getCourseID();
 
             // Send broadcast to notify fragment about click on a folder

@@ -177,7 +177,7 @@ public class MaterialFragment extends Fragment {
         sampleList.add("COURSE FOLDER");
 
         // Get Course Folders
-        ArrayList<Folder> folders = dbHelper.getCourseFolders();
+        ArrayList<Course> folders = dbHelper.getCourseFolders();
 
         // Add them to the adapter if the result is not null
         if (folders != null){

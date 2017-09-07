@@ -19,7 +19,6 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
@@ -38,7 +37,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -577,10 +575,10 @@ public class PushService extends Service {
 
         // Build file uri
         DBHelper dbHelper = new DBHelper(context);
-        Folder courseFolder = dbHelper.getCourseFolder(material.getParentCourseId());
+        Course courseFolder = dbHelper.getCourseFolder(material.getParentCourseId());
         File file = new File(Environment.getExternalStorageDirectory() +
                 "/" + PushUtils.ROOT_FOLDER + "/Y" +
-                courseFolder.getCourseYear() + "/" +
+                courseFolder.getSectionCode() + "/" +
                 courseFolder.getName() + "/" +
                 material.getTitle() + "." + material.getFileFormat()
         );

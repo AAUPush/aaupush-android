@@ -474,9 +474,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /**
      * Retrieves a list of Courses from the database and maps them as Course Folders
-     * @return ArrayList of {@link Folder}
+     * @return ArrayList of {@link Course}
      */
-    public ArrayList<Folder> getCourseFolders() {
+    public ArrayList<Course> getCourseFolders() {
         // Get a readable database instance
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
@@ -494,12 +494,12 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         // The array to return
-        ArrayList<Folder> courseFolders = new ArrayList<>();
+        ArrayList<Course> courseFolders = new ArrayList<>();
 
         // Loop through the cursor and add the course to the array
         while (cursor.moveToNext()){
             // Folder object constructed from this row
-            Folder folder;
+            Course folder;
 
             // Course ID
             int id = cursor.getInt(0);
@@ -519,7 +519,7 @@ public class DBHelper extends SQLiteOpenHelper {
             noOfFilesCursor.close();
 
             // Construct the Folder object
-            folder = new Folder(name, id, noOfFiles);
+            folder = new Course(name, id, noOfFiles);
 
             // Add the folder to the array
             courseFolders.add(folder);
@@ -538,7 +538,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param courseID the ID of the course
      * @return a single course mapped as a Folder
      */
-    public Folder getCourseFolder(int courseID){
+    public Course getCourseFolder(int courseID){
         // Get a readable database instance
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
@@ -553,17 +553,17 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.getCount() < 1){
             sqLiteDatabase.close();
             cursor.close();
-            return new Folder(courseID, "UNKNOWN", -1);
+            return new Course("Unknown", courseID, -1);
         }
         cursor.moveToFirst();
         String courseName = cursor.getString(0);
-        int year = cursor.getInt(1);
+        String sectionCode = cursor.getString(1);
 
         // Close Cursor and DB object
         cursor.close();
         sqLiteDatabase.close();
 
         // Return course name
-        return new Folder(courseID, courseName, year);
+        return new Course(courseID, courseName, sectionCode);
     }
 }

@@ -1,22 +1,22 @@
 package com.aaupush.aaupush;
 
 
-public class Folder {
+public class Course {
     private String name;
     private int courseID;
     private int numberOfFiles;
-    private int courseYear;
+    private String sectionCode;
 
-    public Folder(String name, int courseID, int numberOfFiles) {
+    public Course(String name, int courseID, int numberOfFiles) {
         this.name = name;
         this.courseID = courseID;
         this.numberOfFiles = numberOfFiles;
     }
 
-    public Folder( int courseID, String name, int year) {
+    public Course(int courseID, String name, String sectionCode) {
         this.name = name;
         this.courseID = courseID;
-        this.courseYear = year;
+        this.sectionCode = sectionCode;
     }
 
     public String getName() {
@@ -31,7 +31,7 @@ public class Folder {
         return numberOfFiles;
     }
 
-    public int getCourseYear() {
-        return courseYear;
+    public String getSectionCode() {
+        return sectionCode;
     }
 }
