@@ -6,13 +6,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.aaupush.aaupush.R;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 
 public class FirstRunActivity extends AppCompatActivity {
+
+    public RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_run);
+
+        // Set up request queue for the whole activity
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.first_run_activity);
@@ -21,5 +28,9 @@ public class FirstRunActivity extends AppCompatActivity {
             fragmentManager.beginTransaction().add(R.id.first_run_activity, fragment).commit();
         }
 
+    }
+
+    public RequestQueue getRequestQueue() {
+        return this.requestQueue;
     }
 }

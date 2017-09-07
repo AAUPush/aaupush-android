@@ -26,6 +26,7 @@ public class PushUtils {
     public static final String SP_MATERIAL_LAST_CHECKED = "material_last_checked";
     public static final String SP_ANNOUNCEMENT_LAST_CHECKED = "announcement_last_checked";
     public static final String SP_SECTION_CODE = "section_code";
+    public static final String SP_STUDY_FIELD_ID = "study_field_id";
 
     // BroadCast
     static final String NEW_ANNOUNCEMENT_BROADCAST = "com.aaupush.aaupush.NEW_ANNOUNCEMENT";
@@ -40,6 +41,12 @@ public class PushUtils {
     static final String MATERIAL_REFRESHED_BROADCAST = "com.aaupush.aaupush.MATERIAL_REFRESHED";
     static final String ANNOUNCEMENT_REFRESH_REQUEST_BROADCAST = "com.aaupush.aaupush.ANNOUNCEMENT_REFRESH_REQUEST_BROADCAST";
     static final String MATERIAL_REFRESH_REQUEST_BROADCAST = "com.aaupush.aaupush.MATERIAL_REFRESH_REQUEST_BROADCAST";
+    public static String CLICKED_ON_SECTION_BROADCAST = "com.aaupush.aaupush.CLICKED_ON_SECTION";
+
+    // API Request URL Parameter Names
+    public static final String API_PARAMS_COURSES_STUDY_FIELD = "study_field";
+    public static final String API_PARAMS_COURSES_SECTION = "section";
+    public static final String API_PARAMS_SECTIONS_STUDY_FIELD_ID = "study_field_id";
 
     // API Request URLs
     // Local
@@ -49,10 +56,12 @@ public class PushUtils {
     public static final String URL_GET_ANNOUNCEMENTS = "http://10.0.2.2/~djang/aaupush/api/getAnnouncements.php?";
     // List of materials
     public static final String URL_GET_MATERIALS = "http://10.0.2.2/~djang/aaupush/api/getMaterials.php?";
-    // List of courses withing a given study field
-    public static final String URL_GET_COURSES = "http://10.0.2.2/~djang/aaupush/api/getCourses.php?";
+    // List of courses withing a given study field and section
+    public static final String URL_GET_COURSES = "http://10.0.2.2:8000/api/courses/?";
     // Check if a given section exists
     public static final String URL_SECTION_EXISTS = "http://10.0.2.2:8000/api/section_exists/?";
+    // Get a list of sections for a given study field
+    public static final String URL_GET_SECTIONS = "http://10.0.2.2:8000/api/sections/?";
 
     /*// Online
     // Returns list of study fields

@@ -18,4 +18,7 @@
     <string name="section_CAPS">SECTION</string>
     <string name="year_input_hint">Year(1, 2, 3…)</string>
     <string name="section_input_hint">Section(1, 2, 3…)</string>
+    <string name="finish_setup">FINISH SETUP</string>
+    <string name="courses_you_re_following">Courses You\'re Following</string>
+    <string name="choose_course_to_follow">Choose Course To Follow</string>
 </resources>

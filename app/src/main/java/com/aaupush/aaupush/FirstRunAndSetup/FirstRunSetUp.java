@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -170,13 +171,13 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
                 String studyField = preferences.getString(PushUtils.SP_STUDY_FIELD_CODE, "CS");
 
                 // Build Section code
-                String sectionCode = String.format(Locale.ENGLISH, "%sY%sS%s", studyField.toUpperCase(), enteredYear, enteredSection);
+                final String sectionCode = String.format(Locale.ENGLISH, "%sY%sS%s", studyField.toUpperCase(), enteredYear, enteredSection);
 
+
+                editor.putInt(PushUtils.SP_SELECTED_YEAR, Integer.parseInt(enteredYear));
+                editor.putInt(PushUtils.SP_SELECTED_SECTION, Integer.parseInt(enteredSection));
                 editor.putString(PushUtils.SP_SECTION_CODE, sectionCode);
                 editor.apply();
-
-                // Year of the student
-                final int year = preferences.getInt(PushUtils.SP_SELECTED_YEAR, 1);
 
                 // Append GET parameters
                 url = PushUtils.appendGetParameter("section_code", sectionCode, url);
@@ -189,7 +190,15 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
                             public void onResponse(String response) {
                                 // Output the response to log
                                 if (response.equals("true")) {
-                                    // TODO: Go to course selection fragment
+                                    // Go to course selection fragment
+                                    FragmentManager fragmentManager = getFragmentManager();
+                                    fragmentManager
+                                            .beginTransaction()
+                                            .replace(R.id.first_run_activity,
+                                                    CourseSelectionFragment.newInstance(sectionCode, true))
+                                            .addToBackStack(null)
+                                            .commit();
+
                                     Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
                                 } else {
                                     // Output error about year section combination not existing
@@ -358,6 +367,7 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
         StudyField studyField = (StudyField)adapterView.getItemAtPosition(pos);
 
         // Save the selected study field
+        editor.putInt(PushUtils.SP_STUDY_FIELD_ID, studyField.id);
         editor.putString(PushUtils.SP_STUDY_FIELD_CODE, studyField.code);
         editor.apply();
 

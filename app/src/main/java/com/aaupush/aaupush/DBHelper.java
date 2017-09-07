@@ -35,7 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
     static final String COURSE_TABLE_NAME = "Course";
     static final String COURSE_ID = "id";
     static final String COURSE_NAME = "name";
-    static final String COURSE_YEAR = "year";
+    static final String COURSE_SECTION = "section";
 
     // Table: Material
     static final String MATERIAL_TABLE_NAME = "Material";
@@ -79,9 +79,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
         // sql statement for Course table
         String createCourseTable = "CREATE TABLE " + COURSE_TABLE_NAME + " ( " +
-                COURSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COURSE_ID + " INTEGER, " +
                 COURSE_NAME + " TEXT, " +
-                COURSE_YEAR + " INTEGER);";
+                COURSE_SECTION + " TEXT, " +
+                "PRIMARY KEY(" + COURSE_ID + ", " + COURSE_SECTION + ")" +
+                ");";
 
         // exec the sql statement
         sqLiteDatabase.execSQL(createCourseTable);
@@ -449,9 +451,9 @@ public class DBHelper extends SQLiteOpenHelper {
      * Add a new course to the database
      * @param id the ID of the course
      * @param name The name of the course
-     * @param year The year of the course
+     * @param section The section where the course is given to
      */
-    public void addCourse(int id, String name, int year) {
+    public long addCourse(int id, String name, String section) {
         // Get a writable database instance
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
@@ -460,12 +462,14 @@ public class DBHelper extends SQLiteOpenHelper {
         //
         contentValues.put(COURSE_ID, id);
         contentValues.put(COURSE_NAME, name);
-        contentValues.put(COURSE_YEAR, year);
+        contentValues.put(COURSE_SECTION, section);
 
-        sqLiteDatabase.insert(COURSE_TABLE_NAME, COURSE_ID, contentValues);
+        long insertedRowID = sqLiteDatabase.insert(COURSE_TABLE_NAME, COURSE_ID, contentValues);
 
         // Close the sqLiteDatabase
         sqLiteDatabase.close();
+
+        return insertedRowID;
     }
 
     /**
@@ -540,7 +544,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         // Cursor get the cursor after the querying the db
         Cursor cursor = sqLiteDatabase.rawQuery(
-                "SELECT " + COURSE_NAME + ", " + COURSE_YEAR + " FROM " + COURSE_TABLE_NAME +
+                "SELECT " + COURSE_NAME + ", " + COURSE_SECTION + " FROM " + COURSE_TABLE_NAME +
                         " WHERE " + COURSE_ID + " = " + courseID,
                 null
         );
