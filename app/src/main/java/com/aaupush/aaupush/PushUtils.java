@@ -65,6 +65,8 @@ public class PushUtils {
     public static final String URL_SECTION_EXISTS = "http://10.0.2.2:8000/api/section_exists/?";
     // Get a list of sections for a given study field
     public static final String URL_GET_SECTIONS = "http://10.0.2.2:8000/api/sections/?";
+    // Download a file
+    public static final String URL_DOWNLOAD = "http://10.0.2.2:8000/file/";
 
     /*// Online
     // Returns list of study fields

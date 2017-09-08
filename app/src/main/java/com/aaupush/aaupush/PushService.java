@@ -592,8 +592,8 @@ public class PushService extends Service {
      */
     static public Material downloadMaterial(Material material, Context context) {
         // URI String only for testing
-        String localUri = "http://10.0.2.2/~djang/base.apk";
-        String onlineUri = "http://www.nybapps.tk/aaupush/api/sample.txt";
+        String downloadUrl = PushUtils.URL_DOWNLOAD + material.getMaterialId();
+        //String downloadUrl = "http://www.nybapps.tk/aaupush/api/sample.txt";
 
 
         // Get the download manager instance
@@ -603,7 +603,7 @@ public class PushService extends Service {
         DBHelper dbHelper = new DBHelper(context);
         Course courseFolder = dbHelper.getCourse(material.getParentCourseId());
         File file = new File(Environment.getExternalStorageDirectory() +
-                "/" + PushUtils.ROOT_FOLDER + "/Y" +
+                "/" + PushUtils.ROOT_FOLDER +
                 courseFolder.getSectionCode() + "/" +
                 courseFolder.getName() + "/" +
                 material.getTitle() + "." + material.getFileFormat()
@@ -611,7 +611,7 @@ public class PushService extends Service {
 
 
         DownloadManager.Request request = new DownloadManager.Request(
-                Uri.parse(onlineUri));
+                Uri.parse(downloadUrl));
         request = request.setTitle(material.getTitle())
                 .setDescription(material.getDescription())
                 .setDestinationUri(Uri.fromFile(file));
