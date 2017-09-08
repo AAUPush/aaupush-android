@@ -69,10 +69,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 ANNOUNCEMENT_PUB_DATE + " LONG, " +
                 ANNOUNCEMENT_EXP_DATE + " LONG, " +
                 ANNOUNCEMENT_LECTURER_NAME + " TEXT, " +
-                ANNOUNCEMENT_SECTION + " INTEGER, " +
-                ANNOUNCEMENT_YEAR + " INTEGER, " +
-                ANNOUNCEMENT_IS_URGENT + " INTEGER, " +
-                ANNOUNCEMENT_NOTIFIED + " INTEGER);";
+                ANNOUNCEMENT_IS_URGENT + " INTEGER);";
 
         // exec the sql statement
         sqLiteDatabase.execSQL(createAnnouncementTable);
@@ -129,9 +126,6 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(ANNOUNCEMENT_EXP_DATE, announcement.getExpDate());
         contentValues.put(ANNOUNCEMENT_LECTURER_NAME, announcement.getLecturer());
         contentValues.put(ANNOUNCEMENT_IS_URGENT, announcement.isUrgentInt());
-        contentValues.put(ANNOUNCEMENT_NOTIFIED, announcement.hasBeenNotifiedInt());
-        contentValues.put(ANNOUNCEMENT_SECTION, announcement.getSection());
-        contentValues.put(ANNOUNCEMENT_YEAR, announcement.getYear());
 
         sqLiteDatabase.insert(ANNOUNCEMENT_TABLE_NAME, ANNOUNCEMENT_ID, contentValues);
 
@@ -421,8 +415,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             // Get the integer values for isUrgent and hasBeenNotified and change them to bool
             // this is because SQLite doesn't support boolean data types
-            boolean isUrgent = cursor.getInt(7) == 1;
-            boolean hasBeenNotified = cursor.getInt(8) == 1;
+            boolean isUrgent = cursor.getInt(5) == 1;
 
             // Map the returned rows to announcement objects and add them to the list
             announcements.add(
@@ -432,10 +425,7 @@ public class DBHelper extends SQLiteOpenHelper {
                             cursor.getString(4),
                             cursor.getLong(2),
                             cursor.getLong(3),
-                            cursor.getInt(5),
-                            cursor.getInt(6),
-                            isUrgent,
-                            hasBeenNotified
+                            isUrgent
                     )
             );
         }
@@ -476,7 +466,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * Retrieves a list of Courses from the database and maps them as Course Folders
      * @return ArrayList of {@link Course}
      */
-    public ArrayList<Course> getCourseFolders() {
+    public ArrayList<Course> getCourses() {
         // Get a readable database instance
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
@@ -494,16 +484,17 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         // The array to return
-        ArrayList<Course> courseFolders = new ArrayList<>();
+        ArrayList<Course> courses = new ArrayList<>();
 
         // Loop through the cursor and add the course to the array
         while (cursor.moveToNext()){
             // Folder object constructed from this row
-            Course folder;
+            Course course;
 
             // Course ID
             int id = cursor.getInt(0);
             String name = cursor.getString(1);
+            String sectionCode = cursor.getString(2);
             int noOfFiles;
 
             // Query the db for number of files the course has
@@ -518,19 +509,20 @@ public class DBHelper extends SQLiteOpenHelper {
             // Close noOfFiles cursor
             noOfFilesCursor.close();
 
-            // Construct the Folder object
-            folder = new Course(name, id, noOfFiles);
+            // Construct the Course object
+            course = new Course(name, id, noOfFiles);
+            course.setSectionCode(sectionCode);
 
-            // Add the folder to the array
-            courseFolders.add(folder);
+            // Add the course to the array
+            courses.add(course);
         }
 
         // Close the cursor and the db
         cursor.close();
         sqLiteDatabase.close();
 
-        // Return the list of Course folders
-        return courseFolders;
+        // Return the list of Courses
+        return courses;
     }
 
     /**
@@ -538,7 +530,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param courseID the ID of the course
      * @return a single course mapped as a Folder
      */
-    public Course getCourseFolder(int courseID){
+    public Course getCourse(int courseID){
         // Get a readable database instance
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 

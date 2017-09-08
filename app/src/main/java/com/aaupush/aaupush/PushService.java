@@ -169,26 +169,32 @@ public class PushService extends Service {
         int lastAnnouncementID = preferences.getInt(PushUtils.SP_LAST_ANNOUNCEMENT_RECEIVED_ID, 0);
         Log.d(TAG, "Last Announcement ID - " + lastAnnouncementID);
 
-        // Study field of the student, used for requesting
-        // announcements
-        String studyField = preferences.getString(PushUtils.SP_STUDY_FIELD_CODE, "CS");
-
-        // Section of the student
-        int section = preferences.getInt(PushUtils.SP_SELECTED_SECTION, 1);
-
-        // Year of the student
-        int year = preferences.getInt(PushUtils.SP_SELECTED_YEAR, 1);
-
         // Build the request url
         String url = PushUtils.URL_GET_ANNOUNCEMENTS;
 
-        // append parameters
-        url = PushUtils.appendGetParameter("study_field", studyField, url);
-        url = PushUtils.appendGetParameter("id", String.valueOf(lastAnnouncementID), url);
-        url = PushUtils.appendGetParameter("year", String.valueOf(year), url);
-        url = PushUtils.appendGetParameter("section", String.valueOf(section), url);
+        // Get the list of courses the student is following
+        DBHelper dbHelper = new DBHelper(getApplicationContext());
+        ArrayList<Course> courses = dbHelper.getCourses();
 
-        Log.d(TAG, "Ann Request URL - " + url);
+        // Build the course_section param value
+        String courseSectionBundle = "";
+        for (Course course : courses) {
+            courseSectionBundle += course.getCourseID() + ":" + course.getSectionCode() + "-";
+        }
+
+        // Close the db object
+        dbHelper.close();
+
+        // Remove the last '-'
+        courseSectionBundle = courseSectionBundle.substring(0, courseSectionBundle.length() - 1);
+
+        // append parameters
+        url = PushUtils.appendGetParameter("id", String.valueOf(lastAnnouncementID), url);
+        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_ANNOUNCEMENTS_COURSE_SECTION,
+                courseSectionBundle,
+                url);
+
+        Log.d(TAG, "Announcement Request URL - " + url);
 
         // Build the JSONArrayRequest
         JsonArrayRequest request = new JsonArrayRequest(url,
@@ -227,25 +233,29 @@ public class PushService extends Service {
                                 // Map the JSON object to an Announcement object
 
                                 // Parse postDate and expDate to long values
-                                long postDate = Long.parseLong(json.getString("post_date")
+                                String postDateString = json.getString("post_date")
                                         .replaceAll(" ", "")
                                         .replaceAll("-", "")
-                                        .replaceAll(":", ""));
-                                long expDate = Long.parseLong(json.getString("exp_date")
+                                        .replace(".", "")
+                                        .replaceAll(":", "");
+                                String expDateString = json.getString("exp_date")
                                         .replaceAll(" ", "")
                                         .replaceAll("-", "")
-                                        .replaceAll(":", ""));
+                                        .replace(".", "")
+                                        .replaceAll(":", "");
+
+                                Long postDate = 0L, expDate = 0L;
 
                                 try {
                                     // Cut the second values from the dates
-                                    postDate = Long.parseLong(String.valueOf(postDate).substring(0, 12));
-                                    expDate = Long.parseLong(String.valueOf(expDate).substring(0, 12));
+                                    postDate = Long.parseLong(postDateString.substring(0, 12));
+                                    expDate = Long.parseLong(expDateString.substring(0, 12));
                                 } catch (IndexOutOfBoundsException e) {
                                     Log.e(TAG, "Date parsing exception");
                                 }
 
 
-                                String announcementText = json.getString("announcement");
+                                String announcementText = json.getString("message");
                                 String lecturerName = json.getString("lecturer_name");
 
                                 Announcement announcement = new Announcement(
@@ -254,10 +264,7 @@ public class PushService extends Service {
                                         lecturerName,
                                         postDate,
                                         expDate,
-                                        json.getInt("section"),
-                                        json.getInt("year"),
-                                        json.getString("is_urgent").equals("1"),
-                                        false
+                                        json.getString("is_urgent").equals("1")
                                 );
 
                                 // Add the announcement to the database
@@ -575,7 +582,7 @@ public class PushService extends Service {
 
         // Build file uri
         DBHelper dbHelper = new DBHelper(context);
-        Course courseFolder = dbHelper.getCourseFolder(material.getParentCourseId());
+        Course courseFolder = dbHelper.getCourse(material.getParentCourseId());
         File file = new File(Environment.getExternalStorageDirectory() +
                 "/" + PushUtils.ROOT_FOLDER + "/Y" +
                 courseFolder.getSectionCode() + "/" +

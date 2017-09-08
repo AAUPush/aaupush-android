@@ -143,7 +143,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         // Get and Set Course Name
         final DBHelper dbHelper = new DBHelper(context);
-        String courseName = dbHelper.getCourseFolder(material.getParentCourseId()).getName();
+        String courseName = dbHelper.getCourse(material.getParentCourseId()).getName();
         viewHolder.getMaterialCourseName().setText(courseName);
 
 
