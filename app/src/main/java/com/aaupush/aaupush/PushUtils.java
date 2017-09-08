@@ -48,6 +48,8 @@ public class PushUtils {
     public static final String API_PARAMS_COURSES_SECTION = "section";
     public static final String API_PARAMS_SECTIONS_STUDY_FIELD_ID = "study_field_id";
     public static final String API_PARAMS_ANNOUNCEMENTS_COURSE_SECTION = "course_section";
+    public static final String API_PARAMS_MATERIALS_COURSE_SECTION = "course_section";
+    public static final String API_PARAMS_MATERIALS_ID = "id";
 
     // API Request URLs
     // Local
@@ -56,7 +58,7 @@ public class PushUtils {
     // List of announcements
     public static final String URL_GET_ANNOUNCEMENTS = "http://10.0.2.2:8000/api/announcements/?";
     // List of materials
-    public static final String URL_GET_MATERIALS = "http://10.0.2.2/~djang/aaupush/api/getMaterials.php?";
+    public static final String URL_GET_MATERIALS = "http://10.0.2.2:8000/api/materials/?";
     // List of courses withing a given study field and section
     public static final String URL_GET_COURSES = "http://10.0.2.2:8000/api/courses/?";
     // Check if a given section exists

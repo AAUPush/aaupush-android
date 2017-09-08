@@ -367,23 +367,31 @@ public class PushService extends Service {
         // Get the last material id that was downloaded
         int lastMaterialID = preferences.getInt(PushUtils.SP_LAST_MATERIAL_RECEIVED_ID, 0);
 
-        // Get the study field of the student
-        String studyField = preferences.getString(PushUtils.SP_STUDY_FIELD_CODE, "CS");
+        // Get the list of courses the student is following
+        DBHelper dbHelper = new DBHelper(getApplicationContext());
+        ArrayList<Course> courses = dbHelper.getCourses();
 
-        // Section of the student
-        int section = preferences.getInt(PushUtils.SP_SELECTED_SECTION, 1);
+        // Build the course_section param value
+        String courseSectionBundle = "";
+        for (Course course : courses) {
+            courseSectionBundle += course.getCourseID() + ":" + course.getSectionCode() + "-";
+        }
 
-        // Year of the student
-        int year = preferences.getInt(PushUtils.SP_SELECTED_YEAR, 1);
+        // Close the db object
+        dbHelper.close();
+
+        // Remove the last '-'
+        courseSectionBundle = courseSectionBundle.substring(0, courseSectionBundle.length() - 1);
 
         // Build the request url
         String url = PushUtils.URL_GET_MATERIALS;
 
         // Append GET Materials
-        url = PushUtils.appendGetParameter("study_field", studyField, url);
-        url = PushUtils.appendGetParameter("year", year + "", url);
-        url = PushUtils.appendGetParameter("section", section + "", url);
-        url = PushUtils.appendGetParameter("file_id", lastMaterialID + "", url);
+        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_MATERIALS_ID, lastMaterialID + "", url);
+        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_MATERIALS_COURSE_SECTION, courseSectionBundle, url);
+
+        // Output the constructed url to the log
+        Log.d(TAG, "Material Request URL - " + url);
 
         // Build the JSONArray request
         JsonArrayRequest request = new JsonArrayRequest(
@@ -422,10 +430,21 @@ public class PushService extends Service {
 
                             // Map the JSON object to a Material object and add it to the db
                             // Get the published date
-                            long publishedDate = Long.parseLong(json.getString("pub_date")
+                            long publishedDate = 0L;
+
+                            // Parse pubDate
+                            String pubDateString = json.getString("pub_date")
                                     .replaceAll(" ", "")
                                     .replaceAll("-", "")
-                                    .replaceAll(":", ""));
+                                    .replace(".", "")
+                                    .replaceAll(":", "");
+
+                            try {
+                                // Cut the second values from the dates
+                                publishedDate = Long.parseLong(pubDateString.substring(0, 12));
+                            } catch (IndexOutOfBoundsException e) {
+                                Log.e(TAG, "Date parsing exception");
+                            }
 
                             dbHelper.addMaterial(new Material(
                                     json.getInt("id"),
