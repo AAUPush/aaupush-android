@@ -21,4 +21,7 @@
     <string name="finish_setup">FINISH SETUP</string>
     <string name="courses_you_re_following">Courses You\'re Following</string>
     <string name="choose_course_to_follow">Choose Course To Follow</string>
+    <string name="open_source_licenses">Open Source Licenses</string>
+    <string name="contribute_on_github">Contribute on GitHub</string>
+    <string name="the_push_team_copy_right">The PUSH Team 2017</string>
 </resources>
