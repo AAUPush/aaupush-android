@@ -603,7 +603,7 @@ public class PushService extends Service {
         DBHelper dbHelper = new DBHelper(context);
         Course courseFolder = dbHelper.getCourse(material.getParentCourseId());
         File file = new File(Environment.getExternalStorageDirectory() +
-                "/" + PushUtils.ROOT_FOLDER +
+                "/" + PushUtils.ROOT_FOLDER + "/" +
                 courseFolder.getSectionCode() + "/" +
                 courseFolder.getName() + "/" +
                 material.getTitle() + "." + material.getFileFormat()
