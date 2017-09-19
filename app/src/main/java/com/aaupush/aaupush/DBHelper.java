@@ -582,4 +582,15 @@ public class DBHelper extends SQLiteOpenHelper {
         // Return course name
         return new Course(courseID, courseName, sectionCode);
     }
+
+    /**
+     * Delete every row in the db
+     */
+    public void deleteEverything() {
+        SQLiteDatabase database = getWritableDatabase();
+        database.delete(ANNOUNCEMENT_TABLE_NAME, null, null);
+        database.delete(MATERIAL_TABLE_NAME, null, null);
+        database.delete(COURSE_TABLE_NAME, null, null);
+        database.close();
+    }
 }

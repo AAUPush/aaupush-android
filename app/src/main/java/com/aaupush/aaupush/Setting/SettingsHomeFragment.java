@@ -1,7 +1,10 @@
 package com.aaupush.aaupush.Setting;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,7 +16,9 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.aaupush.aaupush.DBHelper;
 import com.aaupush.aaupush.FirstRunAndSetup.CourseSelectionFragment;
+import com.aaupush.aaupush.FirstRunAndSetup.FirstRunActivity;
 import com.aaupush.aaupush.PushUtils;
 import com.aaupush.aaupush.R;
 
@@ -85,6 +90,53 @@ public class SettingsHomeFragment extends Fragment implements View.OnClickListen
                         .addToBackStack(null)
                         .commit();
 
+                break;
+            case R.id.start_over_tv:
+                // Show a 'are you sure dialog'
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Are You Sure?");
+                builder.setMessage("This will not delete already downloaded materials." +
+                        " But you'll have to start from the beginning and select your section" +
+                        " and courses to follow.");
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setPositiveButton("Start Over", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Reset every shared preferences value to the default
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putBoolean(PushUtils.SP_IS_FIRST_RUN, true);
+                        editor.putInt(PushUtils.SP_SELECTED_YEAR, 0);
+                        editor.putInt(PushUtils.SP_SELECTED_SECTION, 0);
+                        editor.putInt(PushUtils.SP_LAST_ANNOUNCEMENT_RECEIVED_ID, 0);
+                        editor.putString(PushUtils.SP_STUDY_FIELD_CODE, "CS");
+                        editor.putBoolean(PushUtils.SP_IS_ANNOUNCEMENT_FRAGMENT_RUNNING, false);
+                        editor.putBoolean(PushUtils.SP_IS_MATERIAL_FRAGMENT_RUNNING, false);
+                        editor.putInt(PushUtils.SP_NOTIFICATION_COUNTER, 1);
+                        editor.putInt(PushUtils.SP_LAST_MATERIAL_RECEIVED_ID, 0);
+                        editor.putLong(PushUtils.SP_MATERIAL_LAST_CHECKED, 0L);
+                        editor.putLong(PushUtils.SP_ANNOUNCEMENT_LAST_CHECKED, 0L);
+                        editor.putString(PushUtils.SP_SECTION_CODE, "CSY1S1");
+                        editor.putInt(PushUtils.SP_STUDY_FIELD_ID, 0);
+                        editor.putBoolean(PushUtils.SP_NOTIFICATION_ENABLED, true);
+                        editor.putBoolean(PushUtils.SP_ANNOUNCEMENT_NOTIFICATION_ENABLED, true);
+                        editor.putBoolean(PushUtils.SP_MATERIAL_NOTIFICATION_ENABLED, true);
+                        editor.apply();
+
+                        // Delete everything from the db
+                        DBHelper dbHelper = new DBHelper(getContext());
+                        dbHelper.deleteEverything();
+                        dbHelper.close();
+
+                        getActivity().finish();
+                        startActivity(new Intent(getContext(), FirstRunActivity.class));
+                    }
+                });
+                builder.show();
                 break;
         }
     }
