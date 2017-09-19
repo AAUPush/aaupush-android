@@ -176,6 +176,12 @@ public class PushService extends Service {
         DBHelper dbHelper = new DBHelper(getApplicationContext());
         ArrayList<Course> courses = dbHelper.getCourses();
 
+        // Exit if no courses are being followed
+        if (courses == null) {
+            sendBroadcast(new Intent(PushUtils.ANNOUNCEMENT_REFRESHED_BROADCAST));
+            return;
+        }
+
         // Build the course_section param value
         String courseSectionBundle = "";
         for (Course course : courses) {
@@ -370,6 +376,12 @@ public class PushService extends Service {
         // Get the list of courses the student is following
         DBHelper dbHelper = new DBHelper(getApplicationContext());
         ArrayList<Course> courses = dbHelper.getCourses();
+
+        // Exit if no courses are being followed
+        if (courses == null) {
+            sendBroadcast(new Intent(PushUtils.MATERIAL_REFRESHED_BROADCAST));
+            return;
+        }
 
         // Build the course_section param value
         String courseSectionBundle = "";
