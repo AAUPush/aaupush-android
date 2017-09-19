@@ -3,10 +3,11 @@ package com.aaupush.aaupush;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,6 +50,8 @@ public class DBHelper extends SQLiteOpenHelper {
     static final String MATERIAL_AVAILABLE_OFFLINE = "available_offline";
     static final String MATERIAL_OFFLINE_LOCATION = "offline_location";
     static final String MATERIAL_DOWNLOAD_ID = "download_id";
+
+    private static final String TAG = "DBHelper";
 
 
     public DBHelper(Context context){
@@ -455,7 +458,14 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(COURSE_NAME, name);
         contentValues.put(COURSE_SECTION, section);
 
-        long insertedRowID = sqLiteDatabase.insert(COURSE_TABLE_NAME, COURSE_ID, contentValues);
+
+        long insertedRowID;
+        try {
+            insertedRowID = sqLiteDatabase.insert(COURSE_TABLE_NAME, COURSE_ID, contentValues);
+        } catch (SQLiteConstraintException exception) {
+            insertedRowID = -1L;
+            Log.e(TAG, "Course " + name + " already exists.");
+        }
 
         // Close the sqLiteDatabase
         sqLiteDatabase.close();
