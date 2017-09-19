@@ -82,6 +82,7 @@ public class SettingsHomeFragment extends Fragment implements View.OnClickListen
                 fragmentManager
                         .beginTransaction()
                         .replace(R.id.setting_activity, CourseSelectionFragment.newInstance())
+                        .addToBackStack(null)
                         .commit();
 
                 break;
