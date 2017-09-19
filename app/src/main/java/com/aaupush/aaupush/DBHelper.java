@@ -3,6 +3,7 @@ package com.aaupush.aaupush;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
@@ -460,6 +461,19 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.close();
 
         return insertedRowID;
+    }
+
+    /**
+     * Removes a course from the db based on the ID AND section of the course
+     * @param courseID the ID of the course to be removed
+     * @param sectionCode the section code of the course to be removed
+     */
+    public void removeCourse(int courseID, String sectionCode) {
+        SQLiteDatabase database = getWritableDatabase();
+        database.delete(COURSE_TABLE_NAME,
+                COURSE_ID + " = ? AND " + COURSE_SECTION + " = ?",
+                new String[] {courseID + "", sectionCode});
+        database.close();
     }
 
     /**

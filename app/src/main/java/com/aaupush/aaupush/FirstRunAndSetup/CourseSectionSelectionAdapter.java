@@ -1,6 +1,7 @@
 package com.aaupush.aaupush.FirstRunAndSetup;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.aaupush.aaupush.DBHelper;
 import com.aaupush.aaupush.PushUtils;
 import com.aaupush.aaupush.R;
 
@@ -110,23 +112,40 @@ public class CourseSectionSelectionAdapter extends RecyclerView.Adapter<Recycler
         // Get the course from the list
         final CourseSelectionFragment.Course course = (CourseSelectionFragment.Course)list.get(position);
 
+        // Get a Context instance from a view
+        final Context context = viewHolder.getCheckBox().getContext().getApplicationContext();
+
         // Set default value for isChecked
         course.isSelected = course.isInPrimarySection;
 
         // Hide the text view because is not needed for courses
         viewHolder.getTextView().setVisibility(View.GONE);
 
-        // Set checkbox properties
-        viewHolder.getCheckBox().setText(course.courseName);
-        viewHolder.getCheckBox().setChecked(course.isSelected);
-
         // Listen for onCheckChange
         viewHolder.getCheckBox().setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton checkbox, boolean isChecked) {
                 course.isSelected = isChecked;
+
+                // Add or remove the course from the db based on isChecked
+                DBHelper dbHelper = new DBHelper(context);
+                if (isChecked) {
+                    dbHelper.addCourse(course.courseID, course.courseName, course.sectionCode);
+                } else {
+                    dbHelper.removeCourse(course.courseID, course.sectionCode);
+                }
+                // Close DBHelper Instance
+                dbHelper.close();
+
+                // Send a COURSE_LIST_REFRESHED broadcast
+                context.sendBroadcast(new Intent(PushUtils.COURSE_LIST_REFRESHED_BROADCAST));
             }
         });
+
+        // Set checkbox properties
+        viewHolder.getCheckBox().setText(course.courseName);
+        viewHolder.getCheckBox().setChecked(course.isSelected);
+
     }
 
     private void configureSection(CheckableViewHolder viewHolder, int position) {

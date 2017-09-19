@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.aaupush.aaupush.Course;
 import com.aaupush.aaupush.DBHelper;
 import com.aaupush.aaupush.MainActivity;
 import com.aaupush.aaupush.PushUtils;
@@ -55,6 +56,7 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
     // Fragment Modes
     public static final int MODE_COURSES = 1;
     public static final int MODE_SECTIONS = 2;
+    public static final int MODE_FOLLOWING_COURSES = 3;
 
     //
     private int fragmentMode;
@@ -98,6 +100,12 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
         return courseSelectionFragment;
     }
 
+    public static CourseSelectionFragment newInstance() {
+        CourseSelectionFragment courseSelectionFragment = new CourseSelectionFragment();
+        courseSelectionFragment.fragmentMode = MODE_FOLLOWING_COURSES;
+        return courseSelectionFragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,14 +126,21 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
         mainRV = (RecyclerView)view.findViewById(R.id.course_section_rv);
         Button finishButton = (Button)view.findViewById(R.id.finish_setup_btn);
         Button followMoreButton = (Button)view.findViewById(R.id.follow_more_btn);
+        Button coursesImFollowingButton = (Button)view.findViewById(R.id.courses_im_following);
 
         // Set on click listeners for the buttons
         finishButton.setOnClickListener(this);
         followMoreButton.setOnClickListener(this);
+        coursesImFollowingButton.setOnClickListener(this);
 
         // Hide follow more button based on the fragment mode
         if (fragmentMode == MODE_SECTIONS) {
             followMoreButton.setVisibility(View.INVISIBLE);
+        }
+
+        // Hide coursesImFollowing button based on fragment mode
+        if (fragmentMode == MODE_FOLLOWING_COURSES) {
+            coursesImFollowingButton.setVisibility(View.GONE);
         }
 
         // Set up mainRV
@@ -142,12 +157,14 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
+
+        FragmentManager fragmentManager = getFragmentManager();
+
         switch (view.getId()) {
             case R.id.follow_more_btn:
                 // Add the already selected courses to the db
-                addCoursesInAdapterToDb();
+                //addCoursesInAdapterToDb();
 
-                FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager
                         .beginTransaction()
                         .replace(R.id.first_run_activity,
@@ -158,7 +175,7 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
             case R.id.finish_setup_btn:
                 // If the fragment is on course mode, add all the selected courses to the db
                 if (fragmentMode == MODE_COURSES) {
-                    addCoursesInAdapterToDb();
+                    //addCoursesInAdapterToDb();
                 }
 
                 // Save state about finishing FirstRun and Setup
@@ -168,6 +185,13 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
 
                 // Start MainActivity
                 startActivity(new Intent(getContext(), MainActivity.class));
+                break;
+            case R.id.courses_im_following:
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.first_run_activity, CourseSelectionFragment.newInstance())
+                        .commit();
+                break;
         }
     }
 
@@ -377,11 +401,30 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
         requestQueue.add(request);
     }
 
+    private void setCoursesImFollowingAdapter() {
+        // Get the courses being followed from the db
+        DBHelper dbHelper = new DBHelper(getContext());
+
+        ArrayList<com.aaupush.aaupush.Course> courses = dbHelper.getCourses();
+        ArrayList<Object> list = new ArrayList<>();
+
+        for (com.aaupush.aaupush.Course course: courses) {
+            list.add(new Course(course.getCourseID(), course.getName(), course.getSectionCode(), true));
+        }
+
+        // Set the adapter
+        CourseSectionSelectionAdapter adapter = new CourseSectionSelectionAdapter(list);
+        mainRV.setAdapter(adapter);
+
+    }
+
     private void setAdapter() {
         if (fragmentMode == MODE_COURSES) {
             setCourseAdapter();
         } else if (fragmentMode == MODE_SECTIONS) {
             setSectionAdapter();
+        } else if (fragmentMode == MODE_FOLLOWING_COURSES) {
+            setCoursesImFollowingAdapter();
         }
     }
 
@@ -419,6 +462,7 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
 
         // Register BroadcastReceiver
         IntentFilter broadcastFilter = new IntentFilter(PushUtils.CLICKED_ON_SECTION_BROADCAST);
+        broadcastFilter.addAction(PushUtils.COURSE_LIST_REFRESHED_BROADCAST);
         getActivity().registerReceiver(broadcastReceiver, broadcastFilter);
 
 
@@ -444,6 +488,9 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
                                 CourseSelectionFragment.newInstance(section_code, false))
                         //.addToBackStack(null)
                         .commit();
+            }
+            else if (intent.getAction().equals(PushUtils.COURSE_LIST_REFRESHED_BROADCAST)) {
+
             }
         }
     };

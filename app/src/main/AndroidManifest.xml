@@ -30,6 +30,13 @@
             android:enabled="true"
             android:exported="true" />
 
+        <activity
+            android:name=".Setting.SettingActivity"
+            android:label="@string/settings"
+            android:parentActivityName=".MainActivity"
+            >
+
+        </activity>
     </application>
 
 </manifest>

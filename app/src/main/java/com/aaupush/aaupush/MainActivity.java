@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.aaupush.aaupush.FirstRunAndSetup.FirstRunActivity;
+import com.aaupush.aaupush.Setting.SettingActivity;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -133,6 +134,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(getApplicationContext(), SettingActivity.class));
             return true;
         }
 
@@ -150,7 +152,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_material) {
 
         } else if (id == R.id.nav_settings) {
-
+            startActivity(new Intent(getApplicationContext(), SettingActivity.class));
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_about) {

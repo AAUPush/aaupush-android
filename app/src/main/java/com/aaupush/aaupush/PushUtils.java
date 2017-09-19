@@ -27,6 +27,9 @@ public class PushUtils {
     public static final String SP_ANNOUNCEMENT_LAST_CHECKED = "announcement_last_checked";
     public static final String SP_SECTION_CODE = "section_code";
     public static final String SP_STUDY_FIELD_ID = "study_field_id";
+    public static final String SP_NOTIFICATION_ENABLED = "notification_enabled";
+    public static final String SP_ANNOUNCEMENT_NOTIFICATION_ENABLED = "announcement_notification_enabled";
+    public static final String SP_MATERIAL_NOTIFICATION_ENABLED = "material_notification_enabled";
 
     // BroadCast
     static final String NEW_ANNOUNCEMENT_BROADCAST = "com.aaupush.aaupush.NEW_ANNOUNCEMENT";
@@ -42,6 +45,7 @@ public class PushUtils {
     static final String ANNOUNCEMENT_REFRESH_REQUEST_BROADCAST = "com.aaupush.aaupush.ANNOUNCEMENT_REFRESH_REQUEST_BROADCAST";
     static final String MATERIAL_REFRESH_REQUEST_BROADCAST = "com.aaupush.aaupush.MATERIAL_REFRESH_REQUEST_BROADCAST";
     public static String CLICKED_ON_SECTION_BROADCAST = "com.aaupush.aaupush.CLICKED_ON_SECTION";
+    public static final String COURSE_LIST_REFRESHED_BROADCAST = "com.aaupush.aaupush.COURSE_LIST_REFRESHED";
 
     // API Request URL Parameter Names
     public static final String API_PARAMS_COURSES_STUDY_FIELD = "study_field";
