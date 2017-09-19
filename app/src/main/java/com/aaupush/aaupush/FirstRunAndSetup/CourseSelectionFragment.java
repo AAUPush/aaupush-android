@@ -26,6 +26,7 @@ import com.aaupush.aaupush.DBHelper;
 import com.aaupush.aaupush.MainActivity;
 import com.aaupush.aaupush.PushUtils;
 import com.aaupush.aaupush.R;
+import com.aaupush.aaupush.Setting.SettingActivity;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -159,15 +160,21 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
     public void onClick(View view) {
 
         FragmentManager fragmentManager = getFragmentManager();
+        int fragmentFrameID;
+
+        // Get which activity is fragment being hosted
+        if (getActivity() instanceof SettingActivity) {
+            fragmentFrameID = R.id.setting_activity;
+        } else {
+            fragmentFrameID = R.id.first_run_activity;
+        }
 
         switch (view.getId()) {
             case R.id.follow_more_btn:
-                // Add the already selected courses to the db
-                //addCoursesInAdapterToDb();
 
                 fragmentManager
                         .beginTransaction()
-                        .replace(R.id.first_run_activity,
+                        .replace(fragmentFrameID,
                                 CourseSelectionFragment.newInstance(preferences.getInt(PushUtils.SP_STUDY_FIELD_ID, 0)))
                         //.addToBackStack(null)
                         .commit();
@@ -189,7 +196,7 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
             case R.id.courses_im_following:
                 fragmentManager
                         .beginTransaction()
-                        .replace(R.id.first_run_activity, CourseSelectionFragment.newInstance())
+                        .replace(fragmentFrameID, CourseSelectionFragment.newInstance())
                         .commit();
                 break;
         }
@@ -499,9 +506,19 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
             if (intent.getAction().equals(PushUtils.CLICKED_ON_SECTION_BROADCAST)) {
                 String section_code = intent.getStringExtra("section_code");
                 FragmentManager fragmentManager = getFragmentManager();
+
+                // Get which activity is fragment being hosted
+                int fragmentFrameID;
+
+                if (getActivity() instanceof SettingActivity) {
+                    fragmentFrameID = R.id.setting_activity;
+                } else {
+                    fragmentFrameID = R.id.first_run_activity;
+                }
+
                 fragmentManager
                         .beginTransaction()
-                        .replace(R.id.first_run_activity,
+                        .replace(fragmentFrameID,
                                 CourseSelectionFragment.newInstance(section_code, false))
                         //.addToBackStack(null)
                         .commit();
