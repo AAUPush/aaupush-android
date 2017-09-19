@@ -200,6 +200,9 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
         // Get the chosen study field id
         int studyFieldID = preferences.getInt(PushUtils.SP_STUDY_FIELD_ID, 1);
 
+        // Show progress bar
+        view.findViewById(R.id.course_rv_progress_bar).setVisibility(View.VISIBLE);
+
         // Make JSONArrayRequest and get the list of courses
         // Base request URL
         String url = PushUtils.URL_GET_COURSES;
@@ -248,6 +251,9 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
                             CourseSectionSelectionAdapter adapter = new CourseSectionSelectionAdapter(courses);
                             mainRV.setAdapter(adapter);
 
+                            // Hide progress bar
+                            view.findViewById(R.id.course_rv_progress_bar).setVisibility(View.GONE);
+
 
                         } catch (JSONException exception){
                             exception.printStackTrace();
@@ -283,6 +289,9 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
                                         setAdapter();
                                     }
                                 }).show();
+
+                        // Hide progress bar
+                        view.findViewById(R.id.course_rv_progress_bar).setVisibility(View.GONE);
                     }
                 });
 
@@ -304,6 +313,9 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
         // Make JSONArrayRequest and get the list of courses
         // Base request URL
         String url = PushUtils.URL_GET_SECTIONS;
+
+        // Show progress bar
+        view.findViewById(R.id.course_rv_progress_bar).setVisibility(View.VISIBLE);
 
         // Append GET parameters
         url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_SECTIONS_STUDY_FIELD_ID, studyFieldID + "", url);
@@ -350,6 +362,8 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
                             CourseSectionSelectionAdapter adapter = new CourseSectionSelectionAdapter(sections);
                             mainRV.setAdapter(adapter);
 
+                            // Hide progress bar
+                            view.findViewById(R.id.course_rv_progress_bar).setVisibility(View.GONE);
 
                         } catch (JSONException exception){
                             exception.printStackTrace();
@@ -385,6 +399,9 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
                                         setAdapter();
                                     }
                                 }).show();
+
+                        // Hide progress bar
+                        view.findViewById(R.id.course_rv_progress_bar).setVisibility(View.GONE);
                     }
                 });
 

@@ -56,7 +56,7 @@ public class PushUtils {
     public static final String API_PARAMS_MATERIALS_ID = "id";
 
     // API Request URLs
-    // Local
+    /*// Local
     // Returns list of study fields
     public static final String URL_GET_STUDY_FIELDS = "http://10.0.2.2:8000/api/study_fields";
     // List of announcements
@@ -70,17 +70,23 @@ public class PushUtils {
     // Get a list of sections for a given study field
     public static final String URL_GET_SECTIONS = "http://10.0.2.2:8000/api/sections/?";
     // Download a file
-    public static final String URL_DOWNLOAD = "http://10.0.2.2:8000/file/";
+    public static final String URL_DOWNLOAD = "http://10.0.2.2:8000/file/";*/
 
-    /*// Online
+    // Online
     // Returns list of study fields
-    static final String URL_GET_STUDY_FIELDS = "http://www.nybapps.tk/aaupush/api/getStudyFields.php";
+    public static final String URL_GET_STUDY_FIELDS = "http://aaupush.pythonanywhere.com/api/study_fields";
     // List of announcements
-    static final String URL_GET_ANNOUNCEMENTS = "http://www.nybapps.tk/aaupush/api/getAnnouncements.php?";
+    public static final String URL_GET_ANNOUNCEMENTS = "http://aaupush.pythonanywhere.com/api/announcements/?";
     // List of materials
-    static final String URL_GET_MATERIALS = "http://www.nybapps.tk/aaupush/api/getMaterials.php?";
-    // List of courses withing a given study field
-    static final String URL_GET_COURSES = "http://www.nybapps.tk/aaupush/api/getCourses.php?";*/
+    public static final String URL_GET_MATERIALS = "http://aaupush.pythonanywhere.com/api/materials/?";
+    // List of courses withing a given study field and section
+    public static final String URL_GET_COURSES = "http://aaupush.pythonanywhere.com/api/courses/?";
+    // Check if a given section exists
+    public static final String URL_SECTION_EXISTS = "http://aaupush.pythonanywhere.com/api/section_exists/?";
+    // Get a list of sections for a given study field
+    public static final String URL_GET_SECTIONS = "http://aaupush.pythonanywhere.com/api/sections/?";
+    // Download a file
+    public static final String URL_DOWNLOAD = "http://aaupush.pythonanywhere.com/file/";
 
     // Folder name
     public static final String ROOT_FOLDER = "AAUPush";
