@@ -552,6 +552,15 @@ public class PushService extends Service {
      * service should run
      */
     private void setNextServiceRunAlarm() {
+        // Check if notification is enabled before scheduling next alarm
+        // If notification is disabled there's no need to poll the servers in the background
+        if (!preferences.getBoolean(PushUtils.SP_NOTIFICATION_ENABLED, true)) {
+            return;
+        } else if (!preferences.getBoolean(PushUtils.SP_ANNOUNCEMENT_NOTIFICATION_ENABLED, true)
+                && !preferences.getBoolean(PushUtils.SP_MATERIAL_NOTIFICATION_ENABLED, true)) {
+            return;
+        }
+
         AlarmManager alarmManager = (AlarmManager) getApplicationContext()
                 .getSystemService(Context.ALARM_SERVICE);
         Intent startServiceIntent = new Intent(this, PushService.class);
