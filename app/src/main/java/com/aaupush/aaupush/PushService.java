@@ -19,6 +19,7 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
@@ -108,6 +109,8 @@ public class PushService extends Service {
         // Init SharedPreferences
         preferences = getSharedPreferences(PushUtils.SP_KEY_NAME, MODE_PRIVATE);
 
+        // Register ConnectivityChange broadcast receiver here
+        registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
     }
 
@@ -137,7 +140,6 @@ public class PushService extends Service {
 
         // Register broadcast receiver
         IntentFilter broadcastFilters = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-        broadcastFilters.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         broadcastFilters.addAction(PushUtils.ANNOUNCEMENT_REFRESH_REQUEST_BROADCAST);
         broadcastFilters.addAction(PushUtils.MATERIAL_REFRESH_REQUEST_BROADCAST);
         registerReceiver(broadcastReceiver, broadcastFilters);
