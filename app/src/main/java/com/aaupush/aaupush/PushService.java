@@ -46,6 +46,10 @@ public class PushService extends Service {
 
     // Interval the service should run on
     private static final long SERVICE_REFRESH_MS = 600000;
+    public static final long SERVICE_REFRESH_1_MIN = 60000;
+    public static final long SERVICE_REFRESH_5_MIN = 300000;
+    public static final long SERVICE_REFRESH_10_MIN = 600000;
+    public static final long SERVICE_REFRESH_15_MIN = 900000;
 
     // RequestQueue for the whole application
     public RequestQueue requestQueue;
@@ -553,9 +557,12 @@ public class PushService extends Service {
         Intent startServiceIntent = new Intent(this, PushService.class);
         PendingIntent pIntent = PendingIntent.getService(this, 1, startServiceIntent, 0);
 
+        // Get the refresh interval
+        long interval = preferences.getLong(PushUtils.SP_BACKGROUND_REFRESH_INTERVAL, SERVICE_REFRESH_10_MIN);
+
         // Set the alarm // TODO: refresh time value to something greater
         alarmManager.set(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime() + SERVICE_REFRESH_MS,
+                SystemClock.elapsedRealtime() + interval,
                 pIntent);
     }
 

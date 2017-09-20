@@ -13,14 +13,18 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.aaupush.aaupush.DBHelper;
 import com.aaupush.aaupush.FirstRunAndSetup.CourseSelectionFragment;
 import com.aaupush.aaupush.FirstRunAndSetup.FirstRunActivity;
+import com.aaupush.aaupush.PushService;
 import com.aaupush.aaupush.PushUtils;
 import com.aaupush.aaupush.R;
+
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +37,9 @@ public class SettingsHomeFragment extends Fragment implements View.OnClickListen
 
     // Main View
     View view;
+
+    // Background refresh interval text view
+    TextView backgroundIntervalTextView;
 
 
     public SettingsHomeFragment() {
@@ -54,6 +61,7 @@ public class SettingsHomeFragment extends Fragment implements View.OnClickListen
         // Set OnClickListeners
         view.findViewById(R.id.follow_unfollow_courses_tv).setOnClickListener(this);
         view.findViewById(R.id.start_over_tv).setOnClickListener(this);
+        view.findViewById(R.id.refresh_interval_layout).setOnClickListener(this);
 
         // Init notification switches
         SwitchCompat mainNotificationSwitch = (SwitchCompat)view.findViewById(R.id.notification_switch);
@@ -75,11 +83,16 @@ public class SettingsHomeFragment extends Fragment implements View.OnClickListen
         announcementNotificationSwitch.setOnCheckedChangeListener(this);
         materialNotificationSwitch.setOnCheckedChangeListener(this);
 
+        // Background refresh interval text view
+        backgroundIntervalTextView = (TextView)view.findViewById(R.id.background_refresh_value_tv);
+        long refreshIntervalValue = preferences.getLong(PushUtils.SP_BACKGROUND_REFRESH_INTERVAL, PushService.SERVICE_REFRESH_10_MIN)/60000;
+        backgroundIntervalTextView.setText(String.format(Locale.ENGLISH, "%d Minutes", refreshIntervalValue));
+
         return view;
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(final View view) {
         switch (view.getId()) {
             case R.id.follow_unfollow_courses_tv:
                 // Go to follow course fragment
@@ -138,6 +151,42 @@ public class SettingsHomeFragment extends Fragment implements View.OnClickListen
                 });
                 builder.show();
                 break;
+            case R.id.refresh_interval_layout:
+
+                // Refresh interval options
+                String[] refreshIntervals = {
+                        "1 Minute (For debugging only)",
+                        "5 Minutes",
+                        "10 Minutes (Recommended)",
+                        "15 Minutes" };
+
+                AlertDialog.Builder listDialog = new AlertDialog.Builder(getContext());
+                listDialog.setAdapter(new ArrayAdapter<>(getContext(),
+                        android.R.layout.simple_list_item_1,
+                        refreshIntervals), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int position) {
+                        switch (position) {
+                            case 0:
+                                preferences.edit().putLong(PushUtils.SP_BACKGROUND_REFRESH_INTERVAL, PushService.SERVICE_REFRESH_1_MIN).apply();
+                                break;
+                            case 1:
+                                preferences.edit().putLong(PushUtils.SP_BACKGROUND_REFRESH_INTERVAL, PushService.SERVICE_REFRESH_5_MIN).apply();
+                                break;
+                            case 2:
+                                preferences.edit().putLong(PushUtils.SP_BACKGROUND_REFRESH_INTERVAL, PushService.SERVICE_REFRESH_10_MIN).apply();
+                                break;
+                            case 3:
+                                preferences.edit().putLong(PushUtils.SP_BACKGROUND_REFRESH_INTERVAL, PushService.SERVICE_REFRESH_15_MIN).apply();
+                                break;
+                        }
+
+                        // Set the value to the text view
+                        long refreshIntervalValue = preferences.getLong(PushUtils.SP_BACKGROUND_REFRESH_INTERVAL, PushService.SERVICE_REFRESH_10_MIN)/60000;
+                        backgroundIntervalTextView.setText(String.format(Locale.ENGLISH, "%d Minutes", refreshIntervalValue));
+                    }
+                });
+                listDialog.show();
         }
     }
 

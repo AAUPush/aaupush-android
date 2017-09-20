@@ -30,6 +30,7 @@ public class PushUtils {
     public static final String SP_NOTIFICATION_ENABLED = "notification_enabled";
     public static final String SP_ANNOUNCEMENT_NOTIFICATION_ENABLED = "announcement_notification_enabled";
     public static final String SP_MATERIAL_NOTIFICATION_ENABLED = "material_notification_enabled";
+    public static final String SP_BACKGROUND_REFRESH_INTERVAL = "background_refresh_interval";
 
     // BroadCast
     static final String NEW_ANNOUNCEMENT_BROADCAST = "com.aaupush.aaupush.NEW_ANNOUNCEMENT";

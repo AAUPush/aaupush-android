@@ -34,4 +34,5 @@
     <string name="setting">Setting</string>
     <string name="settings">Settings</string>
     <string name="show_courses_im_following">Show Courses I\'m Following</string>
+    <string name="background_refresh_interval">Background Refresh Interval</string>
 </resources>

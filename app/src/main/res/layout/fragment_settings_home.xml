@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.aaupush.aaupush.Setting.SettingsHomeFragment">
 
     <LinearLayout
@@ -121,6 +122,34 @@
                     android:text="@string/delete_everything_and_start_over"
                     android:gravity="center_vertical"
                     />
+
+                <LinearLayout
+                    android:id="@+id/refresh_interval_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="?attr/actionBarSize"
+                    android:background="?attr/selectableItemBackground"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        style="@style/Base.TextAppearance.AppCompat.Subhead"
+                        android:text="@string/background_refresh_interval"
+                        android:gravity="center_vertical" />
+
+                    <TextView
+                        android:id="@+id/background_refresh_value_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        style="@style/Base.TextAppearance.AppCompat.Caption"
+                        android:gravity="center_vertical" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
