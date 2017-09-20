@@ -8,6 +8,9 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.Locale;
 
 public class AboutFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
@@ -24,6 +27,12 @@ public class AboutFragment extends BottomSheetDialogFragment implements View.OnC
         view.findViewById(R.id.open_source_licenses_card).setOnClickListener(this);
         view.findViewById(R.id.web_page_card).setOnClickListener(this);
         view.findViewById(R.id.copy_right_card).setOnClickListener(this);
+
+        // Set the version name and code to the text view
+        TextView versionTv = (TextView)view.findViewById(R.id.version_tv);
+        String versionText = "Version " + BuildConfig.VERSION_NAME +
+                String.format(Locale.ENGLISH, " (%d)", BuildConfig.VERSION_CODE);
+        versionTv.setText(versionText);
 
         return view;
     }
