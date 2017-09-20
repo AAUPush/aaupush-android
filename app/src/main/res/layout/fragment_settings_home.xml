@@ -118,6 +118,7 @@
                     android:layout_height="wrap_content"
                     android:minHeight="?attr/actionBarSize"
                     android:layout_marginTop="8dp"
+                    android:background="?attr/selectableItemBackground"
                     style="@style/Base.TextAppearance.AppCompat.Subhead"
                     android:text="@string/delete_everything_and_start_over"
                     android:gravity="center_vertical"
