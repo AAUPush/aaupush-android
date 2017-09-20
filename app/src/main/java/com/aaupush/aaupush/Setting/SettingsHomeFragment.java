@@ -78,6 +78,13 @@ public class SettingsHomeFragment extends Fragment implements View.OnClickListen
         announcementNotificationSwitch.setChecked(announcementNotificationEnabled);
         materialNotificationSwitch.setChecked(materialNotificationEnabled);
 
+        // Enable or disable the switches of material and announcement notification based on
+        // main notification switch value
+        if (!mainNotificationEnabled) {
+            announcementNotificationSwitch.setEnabled(false);
+            materialNotificationSwitch.setEnabled(false);
+        }
+
         // Set OnCheckedChangeListeners
         mainNotificationSwitch.setOnCheckedChangeListener(this);
         announcementNotificationSwitch.setOnCheckedChangeListener(this);
