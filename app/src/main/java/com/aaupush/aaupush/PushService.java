@@ -292,7 +292,8 @@ public class PushService extends Service {
                                 // the number of announcements is less that 3
                                 if (!preferences.getBoolean(PushUtils.SP_IS_ANNOUNCEMENT_FRAGMENT_RUNNING, false)
                                         && response.length() < 3
-                                        && preferences.getBoolean(PushUtils.SP_NOTIFICATION_ENABLED, true)){
+                                        && preferences.getBoolean(PushUtils.SP_NOTIFICATION_ENABLED, true)
+                                        && preferences.getBoolean(PushUtils.SP_ANNOUNCEMENT_NOTIFICATION_ENABLED, true)){
                                     raiseAnnouncementNotification(
                                             "Announcement From " +
                                                     lecturerName,
@@ -310,7 +311,8 @@ public class PushService extends Service {
                             // and the number of new announcements is greater that 2
                             if (!preferences.getBoolean(PushUtils.SP_IS_ANNOUNCEMENT_FRAGMENT_RUNNING, false)
                                     && response.length() > 2
-                                    && preferences.getBoolean(PushUtils.SP_NOTIFICATION_ENABLED, true)){
+                                    && preferences.getBoolean(PushUtils.SP_NOTIFICATION_ENABLED, true)
+                                    && preferences.getBoolean(PushUtils.SP_ANNOUNCEMENT_NOTIFICATION_ENABLED, true)){
                                 raiseAnnouncementNotification(
                                         "AAU Push",
                                         response.length() + " new announcements");
@@ -494,7 +496,8 @@ public class PushService extends Service {
 
                         // Raise notification if fragment is not running
                         if (!preferences.getBoolean(PushUtils.SP_IS_MATERIAL_FRAGMENT_RUNNING, false)
-                                && preferences.getBoolean(PushUtils.SP_NOTIFICATION_ENABLED, true)){
+                                && preferences.getBoolean(PushUtils.SP_NOTIFICATION_ENABLED, true)
+                                && preferences.getBoolean(PushUtils.SP_MATERIAL_NOTIFICATION_ENABLED, true)){
                             raiseAnnouncementNotification(
                                     "New Files Uploaded",
                                     "A new course materials has just been uploaded. Check it out.");
