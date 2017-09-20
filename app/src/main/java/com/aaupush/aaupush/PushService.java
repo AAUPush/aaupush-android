@@ -291,7 +291,8 @@ public class PushService extends Service {
                                 // if AnnouncementFragment is not running and
                                 // the number of announcements is less that 3
                                 if (!preferences.getBoolean(PushUtils.SP_IS_ANNOUNCEMENT_FRAGMENT_RUNNING, false)
-                                        && response.length() < 3){
+                                        && response.length() < 3
+                                        && preferences.getBoolean(PushUtils.SP_NOTIFICATION_ENABLED, true)){
                                     raiseAnnouncementNotification(
                                             "Announcement From " +
                                                     lecturerName,
@@ -308,7 +309,8 @@ public class PushService extends Service {
                             // Show a summary notification if announcement fragment not running
                             // and the number of new announcements is greater that 2
                             if (!preferences.getBoolean(PushUtils.SP_IS_ANNOUNCEMENT_FRAGMENT_RUNNING, false)
-                                    && response.length() > 2){
+                                    && response.length() > 2
+                                    && preferences.getBoolean(PushUtils.SP_NOTIFICATION_ENABLED, true)){
                                 raiseAnnouncementNotification(
                                         "AAU Push",
                                         response.length() + " new announcements");
@@ -491,7 +493,8 @@ public class PushService extends Service {
 
 
                         // Raise notification if fragment is not running
-                        if (!preferences.getBoolean(PushUtils.SP_IS_MATERIAL_FRAGMENT_RUNNING, false)){
+                        if (!preferences.getBoolean(PushUtils.SP_IS_MATERIAL_FRAGMENT_RUNNING, false)
+                                && preferences.getBoolean(PushUtils.SP_NOTIFICATION_ENABLED, true)){
                             raiseAnnouncementNotification(
                                     "New Files Uploaded",
                                     "A new course materials has just been uploaded. Check it out.");
