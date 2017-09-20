@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     PagerAdapter pagerAdapter;
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity
 
         pagerAdapter = new PagerAdapter(getSupportFragmentManager(), this, fragmentList);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.main_pager);
+        viewPager = (ViewPager) findViewById(R.id.main_pager);
         viewPager.setAdapter(pagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -148,9 +149,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_announcement) {
-            // Handle the camera action
+            viewPager.setCurrentItem(0, true);
         } else if (id == R.id.nav_material) {
-
+            viewPager.setCurrentItem(1, true);
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(getApplicationContext(), SettingActivity.class));
         } else if (id == R.id.nav_share) {
