@@ -1,6 +1,8 @@
 package com.aaupush.aaupush;
 
+import android.content.Context;
 import android.util.Log;
+import android.util.TypedValue;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -152,4 +154,14 @@ public class PushUtils {
         }
     }
 
+    /**
+     * Converts a given SP value to its corresponding pixels value based on the display metrics
+     * @param sp the sp value to be converted
+     * @param context Context instance to retrieve the display metrics
+     * @return the converted value in pixels
+     */
+    public static int convertSpToPixels(float sp, Context context) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
+                sp, context.getResources().getDisplayMetrics());
+    }
 }
