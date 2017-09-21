@@ -176,7 +176,7 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
                         .beginTransaction()
                         .replace(fragmentFrameID,
                                 CourseSelectionFragment.newInstance(preferences.getInt(PushUtils.SP_STUDY_FIELD_ID, 0)))
-                        //.addToBackStack(null)
+                        .addToBackStack(null)
                         .commit();
                 break;
             case R.id.finish_setup_btn:
@@ -197,6 +197,7 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
                 fragmentManager
                         .beginTransaction()
                         .replace(fragmentFrameID, CourseSelectionFragment.newInstance())
+                        .addToBackStack(null)
                         .commit();
                 break;
         }
@@ -520,7 +521,7 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
                         .beginTransaction()
                         .replace(fragmentFrameID,
                                 CourseSelectionFragment.newInstance(section_code, false))
-                        //.addToBackStack(null)
+                        .addToBackStack(null)
                         .commit();
             }
             else if (intent.getAction().equals(PushUtils.COURSE_LIST_REFRESHED_BROADCAST)) {
