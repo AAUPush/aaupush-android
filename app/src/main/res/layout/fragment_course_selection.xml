@@ -1,80 +1,84 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.aaupush.aaupush.FirstRunAndSetup.CourseSelectionFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/choose_course_to_follow"
-        style="@style/TextAppearance.AppCompat.Title"
-        />
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        >
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/course_section_rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp"
-            >
-        </android.support.v7.widget.RecyclerView>
-
-        <ProgressBar
-            android:id="@+id/course_rv_progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone"/>
-
-    </RelativeLayout>
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:orientation="vertical"
-        android:gravity="end"
-        >
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/follow_more_btn"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:text="FOLLOW MORE COURSES"
+            android:padding="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/choose_course_to_follow"
+            style="@style/TextAppearance.AppCompat.Title"
             />
 
-        <Button
-            android:id="@+id/courses_im_following"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:text="@string/show_courses_im_following"
-            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
 
-        <Button
-            android:id="@+id/finish_setup_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:textColor="@color/colorPrimaryDark"
-            android:text="@string/finish_setup"
-            />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/course_section_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                >
+            </android.support.v7.widget.RecyclerView>
 
+            <ProgressBar
+                android:id="@+id/course_rv_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:orientation="vertical"
+            android:gravity="end"
+            >
+
+            <Button
+                android:id="@+id/follow_more_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:text="FOLLOW MORE COURSES"
+                />
+
+            <Button
+                android:id="@+id/courses_im_following"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:text="@string/show_courses_im_following"
+                />
+
+            <Button
+                android:id="@+id/finish_setup_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/finish_setup"
+                />
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
