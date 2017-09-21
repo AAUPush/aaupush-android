@@ -49,7 +49,7 @@ public class AboutFragment extends BottomSheetDialogFragment implements View.OnC
                 startActivity(i);
                 break;
             case R.id.open_source_licenses_card:
-
+                LicensesFragment.displayLicensesFragment(getActivity().getSupportFragmentManager());
                 break;
             case R.id.web_page_card:
                 // AAUPush url
