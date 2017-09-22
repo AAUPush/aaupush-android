@@ -185,6 +185,9 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
                     //addCoursesInAdapterToDb();
                 }
 
+                // Check if this is the first run
+                boolean isFirstRun = preferences.getBoolean(PushUtils.SP_IS_FIRST_RUN, true);
+
                 // Save state about finishing FirstRun and Setup
                 preferences.edit().putBoolean(PushUtils.SP_IS_FIRST_RUN, false).apply();
 
@@ -192,6 +195,11 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
 
                 // Start MainActivity
                 startActivity(new Intent(getContext(), MainActivity.class));
+
+                // If its first run, finish this activity so it doesn't show up in the backstack
+                if (isFirstRun) {
+                    getActivity().finish();
+                }
                 break;
             case R.id.courses_im_following:
                 fragmentManager
