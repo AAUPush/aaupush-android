@@ -10,7 +10,7 @@
             android:title="Announcements" />
         <item
             android:id="@+id/nav_material"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_library_books_black_24dp"
             android:title="Materials" />
 
         <item
@@ -23,7 +23,7 @@
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_share_black_24dp"
                 android:title="Share" />
             <item
                 android:id="@+id/nav_about"
