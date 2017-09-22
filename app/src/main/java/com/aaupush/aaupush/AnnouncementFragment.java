@@ -75,8 +75,6 @@ public class AnnouncementFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.announcement_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(false);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
-                new LinearLayoutManager(getContext()).getOrientation()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // Set adapter for the recycler view
