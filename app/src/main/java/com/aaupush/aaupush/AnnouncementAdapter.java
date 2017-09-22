@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -28,9 +29,33 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
 
 
     @Override
-    public void onBindViewHolder(AnnViewHolder holder, int position) {
+    public void onBindViewHolder(final AnnViewHolder holder, final int position) {
         holder.lecturerNameTv.setText(announcements.get(position).getLecturer());
-        holder.announcementTv.setText(announcements.get(position).getAnnouncement());
+
+        // Set the announcement to the text view if char length is less than 200
+        if (announcements.get(position).getAnnouncement().length() < 200){
+            holder.announcementTv.setText(announcements.get(position).getAnnouncement());
+        } else { // Truncate the text and show the 'show full post' button
+            final String shortAnnouncement = announcements.get(position).getAnnouncement().substring(0, 200) + "...";
+            holder.fullPostShown = false;
+            holder.announcementTv.setText(shortAnnouncement);
+            holder.showFullPostBtn.setVisibility(View.VISIBLE);
+            holder.showFullPostBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (holder.fullPostShown) {
+                        holder.announcementTv.setText(shortAnnouncement);
+                        holder.fullPostShown = false;
+                        holder.showFullPostBtn.setText(R.string.show_full_post);
+                    } else {
+                        holder.announcementTv.setText(announcements.get(position).getAnnouncement());
+                        holder.fullPostShown = true;
+                        holder.showFullPostBtn.setText(R.string.hide_full_post);
+                    }
+                }
+            });
+        }
+
 
         if (!announcements.get(position).isUrgent()){
             holder.isUrgentTv.setVisibility(View.GONE);
@@ -65,6 +90,9 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
     static class AnnViewHolder extends RecyclerView.ViewHolder{
 
         TextView lecturerNameTv, isUrgentTv, announcementTv, datePostedTv;
+        Button showFullPostBtn;
+
+        boolean fullPostShown = true;
 
         AnnViewHolder(View itemView) {
             super(itemView);
@@ -73,6 +101,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
             isUrgentTv = (TextView) itemView.findViewById(R.id.is_urgent);
             announcementTv = (TextView) itemView.findViewById(R.id.announcement);
             datePostedTv = (TextView) itemView.findViewById(R.id.posted_on);
+            showFullPostBtn = (Button)itemView.findViewById(R.id.show_full_post_btn);
         }
     }
 }
