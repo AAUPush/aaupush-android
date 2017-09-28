@@ -166,6 +166,18 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Fragments onDetach is not called when home button is pressed. So we need to set
+        // the is_running fragments to false here also so that notifications are raised
+        SharedPreferences.Editor editor = getSharedPreferences(PushUtils.SP_KEY_NAME,
+                Context.MODE_PRIVATE).edit();
+        editor.putBoolean(PushUtils.SP_IS_MATERIAL_FRAGMENT_RUNNING, false);
+        editor.putBoolean(PushUtils.SP_IS_ANNOUNCEMENT_FRAGMENT_RUNNING, false);
+        editor.apply();
+    }
 
     class PagerAdapter extends FragmentPagerAdapter {
 
