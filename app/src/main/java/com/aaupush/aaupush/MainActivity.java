@@ -1,5 +1,6 @@
 package com.aaupush.aaupush;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -177,6 +178,16 @@ public class MainActivity extends AppCompatActivity
         editor.putBoolean(PushUtils.SP_IS_MATERIAL_FRAGMENT_RUNNING, false);
         editor.putBoolean(PushUtils.SP_IS_ANNOUNCEMENT_FRAGMENT_RUNNING, false);
         editor.apply();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Dismiss pending notifications(if any)
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+
     }
 
     class PagerAdapter extends FragmentPagerAdapter {
