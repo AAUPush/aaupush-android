@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -235,22 +237,40 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                     Uri uri = Uri.parse(material.getOfflineLocation());
 
-                    openFile.setDataAndType(uri, type);
-                    try {
-                        context.getApplicationContext().startActivity(openFile);
-                    } catch (ActivityNotFoundException e) {
+                    File file = new File(uri.getPath());
+                    if (!file.exists()) {
+                        // File Must have been either deleted or moved
+                        // Show error toast to the user
                         Toast.makeText(context,
-                                "No application found to open the file! File Format: " + material.getFileFormat(),
+                                "File either deleted or moved from AAUPush directory." +
+                                        " Try downloading it again.",
                                 Toast.LENGTH_SHORT).show();
+
+                        // Update the db to set the material as unavailable
+                        dbHelper.setMaterialDownloadStatus(material.getMaterialId(), Material.MATERIAL_NOT_AVAILABLE, 0, null);
+
+                        // Send a broadcast for the list of materials to be refreshed
+                        context.sendBroadcast(new Intent(PushUtils.MATERIAL_REFRESHED_BROADCAST));
+                        return;
                     }
 
-                }
-            }
-        });
 
-        // Close DBObject
+                        openFile.setDataAndType(uri, type);
+                        try {
+                            context.getApplicationContext().startActivity(openFile);
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(context,
+                                    "No application found to open the file! File Format: " + material.getFileFormat(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }
+            });
+
+            // Close DBObject
         dbHelper.close();
-    }
+        }
 
     void addHeader(int position, String header) {
         list.add(position, header);
@@ -311,7 +331,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return downloadOpenBtn;
         }
 
-         ProgressBar getDownloadProgressBar() {
+        ProgressBar getDownloadProgressBar() {
             return downloadProgressBar;
         }
     }
