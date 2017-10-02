@@ -2,30 +2,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
     tools:context="com.aaupush.aaupush.FirstRunAndSetup.FirstRunIntro">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_above="@id/empty_anchor"
+        >
+
+
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_push_colored"
+            android:layout_marginBottom="8dp"
+            />
+
+        <TextView
+            android:id="@+id/welcome_to_aaupush_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_to_aaupush"
+            android:textSize="32sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:gravity="center" />
+
+
+    </LinearLayout>
+
+
     <TextView
+        android:id="@+id/empty_anchor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/welcome_to_aaupush"
-        android:textSize="32sp"
-        android:textColor="#d3ffffff"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:gravity="center"
-        android:layout_marginTop="142dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerInParent="true"/>
 
     <Button
         android:id="@+id/start_setup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/let_s_get_started"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:textColor="#ffffff"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="143dp" />
+        android:layout_marginBottom="85dp" />
 
 
 
