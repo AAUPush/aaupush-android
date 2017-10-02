@@ -199,7 +199,6 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
                                             .addToBackStack(null)
                                             .commit();
 
-                                    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
                                 } else {
                                     // Output error about year section combination not existing
                                     Snackbar.make(view,
@@ -297,8 +296,6 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
                             }
                         } catch (JSONException exception){
                             exception.printStackTrace();
-                            // TODO: Remove toast
-                            Toast.makeText(getContext(), "Error in onResponse", Toast.LENGTH_SHORT).show();
                         }
 
                         // Build Adapter for Spinner
