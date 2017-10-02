@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.amulyakhare.textdrawable.TextDrawable;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 
 public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -144,10 +146,23 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         viewHolder.getMaterialFolderName().setText(material.getTitle());
         viewHolder.getMaterialFolderDescription().setText(material.getDescription());
 
-        // Get and Set Course Name
+        // Get Course Name
         final DBHelper dbHelper = new DBHelper(context);
         String courseName = dbHelper.getCourse(material.getParentCourseId()).getName();
-        viewHolder.getMaterialCourseName().setText(courseName);
+
+        // Get file Size
+        String fileSize = material.getFileSize() + " KB";
+
+        // Get Published Date
+        Calendar publishedDateCal = PushUtils.stringToCalendar(String.valueOf(material.getPublishedDate()), false);
+        String publishedDateText = publishedDateCal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.ENGLISH);
+        publishedDateText += " " + publishedDateCal.get(Calendar.DAY_OF_MONTH);
+
+        // Append Material Detail Text(eg 'Programming | Jun 20 | 500 KB')
+        String detailText = courseName + " | " + publishedDateText + " | " + fileSize;
+
+        // Set the detail text to the text view
+        viewHolder.getMaterialDetail().setText(detailText);
 
 
         // Set download, open or cancel button for downloads
@@ -261,7 +276,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private ImageView materialFormat;
         private TextView materialFolderName;
         private TextView materialFolderDescription;
-        private TextView materialCourseName;
+        private TextView materialDetail;
         private ImageButton downloadOpenBtn;
         private ProgressBar downloadProgressBar;
 
@@ -271,7 +286,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             materialFormat = (ImageView) itemView.findViewById(R.id.file_type_img);
             materialFolderName = (TextView) itemView.findViewById(R.id.file_name);
             materialFolderDescription = (TextView) itemView.findViewById(R.id.file_description);
-            materialCourseName = (TextView) itemView.findViewById(R.id.course_name);
+            materialDetail = (TextView) itemView.findViewById(R.id.course_name);
             downloadOpenBtn = (ImageButton) itemView.findViewById(R.id.download_open_btn);
             downloadProgressBar = (ProgressBar) itemView.findViewById(R.id.download_progress_bar);
         }
@@ -288,8 +303,8 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return materialFolderDescription;
         }
 
-        TextView getMaterialCourseName() {
-            return materialCourseName;
+        TextView getMaterialDetail() {
+            return materialDetail;
         }
 
         ImageButton getDownloadOpenBtn() {

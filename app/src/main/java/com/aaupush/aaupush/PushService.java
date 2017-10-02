@@ -475,7 +475,8 @@ public class PushService extends Service {
                                     json.getString("file_format"),
                                     Material.MATERIAL_NOT_AVAILABLE,
                                     json.getInt("course_id"),
-                                    publishedDate
+                                    publishedDate,
+                                    ((float) json.getDouble("file_size"))
                             ));
 
                             // Save the ID of the last material

@@ -49,6 +49,7 @@ public class DBHelper extends SQLiteOpenHelper {
     static final String MATERIAL_FILE_FORMAT = "file_format";
     static final String MATERIAL_AVAILABLE_OFFLINE = "available_offline";
     static final String MATERIAL_OFFLINE_LOCATION = "offline_location";
+    static final String MATERIAL_FILE_SIZE = "file_size";
     static final String MATERIAL_DOWNLOAD_ID = "download_id";
 
     private static final String TAG = "DBHelper";
@@ -100,6 +101,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 MATERIAL_FILE_FORMAT + " TEXT, " +
                 MATERIAL_AVAILABLE_OFFLINE + " INTEGER, " +
                 MATERIAL_OFFLINE_LOCATION + " TEXT, " +
+                MATERIAL_FILE_SIZE + " REAL, " +
                 MATERIAL_DOWNLOAD_ID + " LONG);";
 
         // exec the SQL statement
@@ -155,6 +157,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(MATERIAL_COURSE_ID, material.getParentCourseId());
         contentValues.put(MATERIAL_FILE_FORMAT, material.getFileFormat());
         contentValues.put(MATERIAL_PUB_DATE, material.getPublishedDate());
+        contentValues.put(MATERIAL_FILE_SIZE, material.getFileSize());
 
         // Add Offline location if material is offline available
         if (material.getAvailableOfflineStatus() == Material.MATERIAL_AVAILABLE_OFFLINE){
@@ -226,7 +229,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     cursor.getString(5),
                     cursor.getInt(6),
                     cursor.getInt(4),
-                    cursor.getLong(3)
+                    cursor.getLong(3),
+                    cursor.getFloat(8)
             );
 
             if (Material.MATERIAL_AVAILABLE_OFFLINE == cursor.getInt(6)){
@@ -279,7 +283,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     cursor.getString(5),
                     cursor.getInt(6),
                     cursor.getInt(4),
-                    cursor.getLong(3)
+                    cursor.getLong(3),
+                    cursor.getFloat(8)
             );
 
             if (Material.MATERIAL_AVAILABLE_OFFLINE == cursor.getInt(6)){
@@ -365,10 +370,11 @@ public class DBHelper extends SQLiteOpenHelper {
                     cursor.getString(5),
                     cursor.getInt(6),
                     cursor.getInt(4),
-                    cursor.getLong(3)
+                    cursor.getLong(3),
+                    cursor.getFloat(8)
             );
 
-            material.setDownloadID(cursor.getLong(8));
+            material.setDownloadID(cursor.getLong(9));
 
             if (Material.MATERIAL_AVAILABLE_OFFLINE == cursor.getInt(6)){
                 material.setOfflineLocation(cursor.getString(7));

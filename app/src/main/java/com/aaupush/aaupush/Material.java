@@ -15,9 +15,12 @@ public class Material {
     private int parentCourseId;
     private long downloadID;
     private long publishedDate;
+    private float fileSize; // in KB
     private String offlineLocation; // May have to change this to a URI
 
-    public Material(int materialId, String title, String description, String fileFormat, int availableOfflineStatus, int parentCourseId, long publishedDate) {
+    public Material(int materialId, String title, String description, String fileFormat,
+                    int availableOfflineStatus, int parentCourseId, long publishedDate,
+                    float fileSize) {
         this.materialId = materialId;
         this.title = title;
         this.description = description;
@@ -25,6 +28,7 @@ public class Material {
         this.availableOfflineStatus = availableOfflineStatus;
         this.parentCourseId = parentCourseId;
         this.publishedDate = publishedDate;
+        this.fileSize = fileSize;
     }
 
     public int getMaterialId() {
@@ -65,6 +69,10 @@ public class Material {
 
     public String getOfflineLocation() {
         return offlineLocation;
+    }
+
+    public float getFileSize() {
+        return fileSize;
     }
 
     public void setOfflineLocation(String offlineLocation) {
