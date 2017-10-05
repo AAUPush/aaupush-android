@@ -153,7 +153,14 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         String courseName = dbHelper.getCourse(material.getParentCourseId()).getName();
 
         // Get file Size
-        String fileSize = material.getFileSize() + " KB";
+        String fileSize;
+        if (material.getFileSize() > 1000) {
+            fileSize = String.format(Locale.ENGLISH, "%1.2f", material.getFileSize() * 1000);
+            fileSize += " MB";
+        } else {
+            fileSize = String.format(Locale.ENGLISH, "%1.0f", material.getFileSize());
+            fileSize += " KB";
+        }
 
         // Get Published Date
         Calendar publishedDateCal = PushUtils.stringToCalendar(String.valueOf(material.getPublishedDate()), false);
