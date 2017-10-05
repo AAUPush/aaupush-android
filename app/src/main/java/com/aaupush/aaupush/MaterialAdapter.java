@@ -168,7 +168,10 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         publishedDateText += " " + publishedDateCal.get(Calendar.DAY_OF_MONTH);
 
         // Append Material Detail Text(eg 'Programming | Jun 20 | 500 KB')
-        String detailText = courseName + " | " + publishedDateText + " | " + fileSize;
+        String detailText = courseName + " | " + publishedDateText;
+        if (!(material.getAvailableOfflineStatus() == Material.MATERIAL_AVAILABLE_OFFLINE)) {
+            detailText += " | " + fileSize;
+        }
 
         // Set the detail text to the text view
         viewHolder.getMaterialDetail().setText(detailText);
