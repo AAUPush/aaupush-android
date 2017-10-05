@@ -707,6 +707,19 @@ public class PushService extends Service {
             // Check if such download(download id of the material) exists in the downloads db
             if (cursor == null) { continue; }
 
+            // Check if the cursor count is less than 1
+            if (cursor.getCount() < 1) {
+                // Material download must have been canceled
+                dbHelper.setMaterialDownloadStatus(
+                        material.getMaterialId(),
+                        Material.MATERIAL_NOT_AVAILABLE,
+                        material.getDownloadID(),
+                        null
+                );
+                sendBroadcast(new Intent(PushUtils.NEW_MATERIAL_BROADCAST));
+                continue;
+            }
+
             cursor.moveToFirst();
 
             // Get the status of the download
