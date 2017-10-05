@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.aaupush.aaupush.FirstRunAndSetup.FirstRunActivity;
 import com.aaupush.aaupush.Setting.SettingActivity;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -105,6 +106,11 @@ public class MainActivity extends AppCompatActivity
         }
 
 
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 
     @Override
