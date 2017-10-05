@@ -250,7 +250,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         dbHelper.setMaterialDownloadStatus(material.getMaterialId(), Material.MATERIAL_NOT_AVAILABLE, 0, null);
 
                         // Send a broadcast for the list of materials to be refreshed
-                        context.sendBroadcast(new Intent(PushUtils.MATERIAL_REFRESHED_BROADCAST));
+                        context.sendBroadcast(new Intent(PushUtils.NEW_MATERIAL_BROADCAST));
                         return;
                     }
 
