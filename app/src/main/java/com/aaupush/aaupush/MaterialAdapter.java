@@ -4,7 +4,6 @@ import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 
 import java.io.File;
 import java.io.IOException;
@@ -215,9 +215,10 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 // TODO: Add more icons by release
 
                 // File type is unknown, so build a text drawable based on the format
+                int randomColor = ColorGenerator.MATERIAL.getColor(material.getFileFormat());
                 TextDrawable fileDrawable = TextDrawable.builder()
                         .beginConfig().fontSize(PushUtils.convertSpToPixels(18, context)).endConfig()
-                        .buildRound(material.getFileFormat(), Color.GRAY);
+                        .buildRound(material.getFileFormat(), randomColor);
                 // set the drawable
                 viewHolder.getMaterialFormat().setImageDrawable(fileDrawable);
                 break;
