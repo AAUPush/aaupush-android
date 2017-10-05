@@ -59,6 +59,7 @@ public class AnnouncementFragment extends Fragment {
         // Set up swipe refresh layout
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.announcement_refresh_layout);
         swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark));
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override

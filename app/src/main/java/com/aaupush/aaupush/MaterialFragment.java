@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -82,6 +83,7 @@ public class MaterialFragment extends Fragment {
         // Set up swipe refresh layout
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.material_refresh_layout);
         swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark));
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
