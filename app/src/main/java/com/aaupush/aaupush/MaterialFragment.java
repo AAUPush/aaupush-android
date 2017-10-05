@@ -81,6 +81,7 @@ public class MaterialFragment extends Fragment {
 
         // Set up swipe refresh layout
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.material_refresh_layout);
+        swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
