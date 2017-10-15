@@ -246,7 +246,7 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
 
                 // Set request retry policy
                 request.setRetryPolicy(
-                        new DefaultRetryPolicy(40000,
+                        new DefaultRetryPolicy(10000,
                                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
@@ -347,7 +347,7 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
 
         // Set request retry policy
         request.setRetryPolicy(
-                new DefaultRetryPolicy(60000,
+                new DefaultRetryPolicy(10000,
                         DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 

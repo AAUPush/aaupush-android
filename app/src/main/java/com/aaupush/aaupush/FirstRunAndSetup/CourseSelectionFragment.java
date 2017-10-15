@@ -313,7 +313,7 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
 
         // Set request retry policy
         request.setRetryPolicy(
-                new DefaultRetryPolicy(60000,
+                new DefaultRetryPolicy(10000,
                         DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
@@ -423,7 +423,7 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
 
         // Set request retry policy
         request.setRetryPolicy(
-                new DefaultRetryPolicy(60000,
+                new DefaultRetryPolicy(10000,
                         DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
