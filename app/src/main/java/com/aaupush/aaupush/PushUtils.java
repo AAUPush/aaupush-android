@@ -77,19 +77,19 @@ public class PushUtils {
 
     // Online
     // Returns list of study fields
-    public static final String URL_GET_STUDY_FIELDS = "http://aaupush.pythonanywhere.com/api/study_fields";
+    public static final String URL_GET_STUDY_FIELDS = "http://aaupush.com/api/study_fields";
     // List of announcements
-    public static final String URL_GET_ANNOUNCEMENTS = "http://aaupush.pythonanywhere.com/api/announcements/?";
+    public static final String URL_GET_ANNOUNCEMENTS = "http://aaupush.com/api/announcements/?";
     // List of materials
-    public static final String URL_GET_MATERIALS = "http://aaupush.pythonanywhere.com/api/materials/?";
+    public static final String URL_GET_MATERIALS = "http://aaupush.com/api/materials/?";
     // List of courses withing a given study field and section
-    public static final String URL_GET_COURSES = "http://aaupush.pythonanywhere.com/api/courses/?";
+    public static final String URL_GET_COURSES = "http://aaupush.com/api/courses/?";
     // Check if a given section exists
-    public static final String URL_SECTION_EXISTS = "http://aaupush.pythonanywhere.com/api/section_exists/?";
+    public static final String URL_SECTION_EXISTS = "http://aaupush.com/api/section_exists/?";
     // Get a list of sections for a given study field
-    public static final String URL_GET_SECTIONS = "http://aaupush.pythonanywhere.com/api/sections/?";
+    public static final String URL_GET_SECTIONS = "http://aaupush.com/api/sections/?";
     // Download a file
-    public static final String URL_DOWNLOAD = "http://aaupush.pythonanywhere.com/file/";
+    public static final String URL_DOWNLOAD = "http://aaupush.com/file/";
 
     // Folder name
     public static final String ROOT_FOLDER = "AAUPush";
