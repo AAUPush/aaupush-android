@@ -123,6 +123,7 @@ public class MaterialFragment extends Fragment {
         broadcastFilter.addAction(PushUtils.MATERIAL_DOWNLOAD_COMPLETED_BROADCAST);
         broadcastFilter.addAction(PushUtils.NO_CONNECTION_BROADCAST);
         broadcastFilter.addAction(PushUtils.CONNECTION_TIMEOUT_BROADCAST);
+        broadcastFilter.addAction(PushUtils.UNEXPECTED_SERVER_RESPONSE);
         broadcastFilter.addAction(PushUtils.MATERIAL_REFRESHED_BROADCAST);
         getActivity().registerReceiver(broadcastReceiver, broadcastFilter);
 
@@ -272,6 +273,12 @@ public class MaterialFragment extends Fragment {
                 // Stop refreshing layout
                 swipeRefreshLayout.setRefreshing(false);
             } else if (intent.getAction().equals(PushUtils.MATERIAL_REFRESHED_BROADCAST)) {
+                // Stop refreshing layout
+                swipeRefreshLayout.setRefreshing(false);
+            } else if (intent.getAction().equals(PushUtils.UNEXPECTED_SERVER_RESPONSE)) {
+                Snackbar.make(getView(), "Sorry. Something went wrong with our servers.",
+                        Snackbar.LENGTH_LONG).show();
+
                 // Stop refreshing layout
                 swipeRefreshLayout.setRefreshing(false);
             }

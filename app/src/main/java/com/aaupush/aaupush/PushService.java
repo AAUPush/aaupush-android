@@ -345,6 +345,7 @@ public class PushService extends Service {
                             sendBroadcast(new Intent(PushUtils.CONNECTION_TIMEOUT_BROADCAST));
                             errorMessage = "Server took too long to respond";
                         } else if (error instanceof ServerError) {
+                            sendBroadcast(new Intent(PushUtils.UNEXPECTED_SERVER_RESPONSE));
                             errorMessage = "The was a problem with the server";
                         } else if (error instanceof NetworkError) {
                             errorMessage = "Unknown error with the network";
@@ -531,6 +532,7 @@ public class PushService extends Service {
                     sendBroadcast(new Intent(PushUtils.CONNECTION_TIMEOUT_BROADCAST));
                     errorMessage = "Server took too long to respond";
                 } else if (error instanceof ServerError) {
+                    sendBroadcast(new Intent(PushUtils.UNEXPECTED_SERVER_RESPONSE));
                     errorMessage = "The was a problem with the server";
                 } else if (error instanceof NetworkError) {
                     errorMessage = "Unknown error with the network";
