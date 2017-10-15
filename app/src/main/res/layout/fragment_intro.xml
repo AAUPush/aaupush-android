@@ -14,10 +14,11 @@
 
 
         <ImageView
+            android:id="@+id/push_logo"
             android:layout_width="140dp"
             android:layout_height="80dp"
             android:src="@drawable/ic_push_colored"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="32dp"
             />
 
         <TextView
