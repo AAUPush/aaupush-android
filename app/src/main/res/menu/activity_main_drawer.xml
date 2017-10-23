@@ -5,13 +5,9 @@
 
     <group android:checkableBehavior="none">
         <item
-            android:id="@+id/nav_announcement"
-            android:icon="@drawable/ic_announcement"
-            android:title="Announcements" />
-        <item
-            android:id="@+id/nav_material"
-            android:icon="@drawable/ic_library_books_black_24dp"
-            android:title="Materials" />
+            android:id="@+id/nav_add_drop_courses"
+            android:icon="@drawable/ic_add_box_black_24dp"
+            android:title="@string/add_drop_courses" />
 
         <item
             android:id="@+id/nav_settings"

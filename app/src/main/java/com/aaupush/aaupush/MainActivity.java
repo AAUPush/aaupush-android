@@ -155,10 +155,11 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_announcement) {
-            viewPager.setCurrentItem(0, true);
-        } else if (id == R.id.nav_material) {
-            viewPager.setCurrentItem(1, true);
+        if (id == R.id.nav_add_drop_courses) {
+            Intent openCourseSelectionFragment = new Intent(this, SettingActivity.class);
+            openCourseSelectionFragment.putExtra(SettingActivity.FRAGMENT_MODE_INTENT_EXTRA_KEY,
+                    SettingActivity.MODE_ADD_DROP_COURSE);
+            startActivity(openCourseSelectionFragment);
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(getApplicationContext(), SettingActivity.class));
         } else if (id == R.id.nav_share) {

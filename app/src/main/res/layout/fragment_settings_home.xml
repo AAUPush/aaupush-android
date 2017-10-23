@@ -35,7 +35,7 @@
                     android:minHeight="?attr/actionBarSize"
                     android:background="?attr/selectableItemBackground"
                     style="@style/Base.TextAppearance.AppCompat.Subhead"
-                    android:text="@string/follow_unfollow_courses"
+                    android:text="@string/add_drop_courses"
                     android:gravity="center_vertical"
                     />
 
