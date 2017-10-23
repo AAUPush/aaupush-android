@@ -11,11 +11,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v4.widget.Space
             android:layout_width="match_parent"
-            android:layout_height="24dp"></LinearLayout>
+            android:layout_height="24dp"/>
 
         <LinearLayout
+            android:id="@+id/department_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -26,11 +27,34 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/select_department"
+                android:layout_marginBottom="8dp"/>
+
+            <Spinner
+                android:id="@+id/department_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="32dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/study_field_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="24dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/select_study_field"
                 android:layout_marginBottom="8dp"/>
 
             <Spinner
-                android:id="@+id/studyFieldSpinner"
+                android:id="@+id/study_field_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="32dp" />
 

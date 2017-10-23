@@ -59,6 +59,11 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
 
     // UI Elements
     Spinner studyFieldSpinner;
+    Spinner departmentSpinner;
+
+    // Spinner Holding LinearLayout s
+    LinearLayout studyFieldLayout;
+    LinearLayout departmentLayout;
 
     // Loading Layout
     LinearLayout loadingForeground;
@@ -118,10 +123,15 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
 
         requestQueue = Volley.newRequestQueue(getContext());
 
+        // Init Spinner for Department
+        departmentSpinner = (Spinner) view.findViewById(R.id.department_spinner);
+        departmentSpinner.setOnItemSelectedListener(this);
+        setDepartmentSpinnerAdapter();
+
         // Init Spinner for Study Fields
-        studyFieldSpinner = (Spinner) view.findViewById(R.id.studyFieldSpinner);
+        studyFieldSpinner = (Spinner) view.findViewById(R.id.study_field_spinner);
         studyFieldSpinner.setOnItemSelectedListener(this);
-        setStudyFieldAdapter();
+        //setStudyFieldAdapter();
 
         final Button nextBtn = (Button) view.findViewById(R.id.next_button);
         nextBtn.setOnClickListener(new View.OnClickListener() {
@@ -171,7 +181,7 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
                 String studyField = preferences.getString(PushUtils.SP_STUDY_FIELD_CODE, "CS");
 
                 // Build Section code
-                final String sectionCode = String.format(Locale.ENGLISH, "%sY%sS%s", studyField.toUpperCase(), enteredYear, enteredSection);
+                final String sectionCode = String.format(Locale.ENGLISH, "%sY%sS%s", studyField, enteredYear, enteredSection);
 
 
                 editor.putInt(PushUtils.SP_SELECTED_YEAR, Integer.parseInt(enteredYear));
@@ -266,7 +276,11 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
     }
 
 
-    private void setStudyFieldAdapter(){
+    /**
+     * Set an adapter for the study field spinner with a list of study fields from a given ID.
+     * @param departmentId the department from which the study fields come from.
+     */
+    private void setStudyFieldAdapter(final int departmentId){
         final ArrayList<StudyField> studyFields = new ArrayList<>();
 
         // Show progress dialog
@@ -274,7 +288,10 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
 
 
         // Build Request
-        JsonArrayRequest request = new JsonArrayRequest(PushUtils.URL_GET_STUDY_FIELDS,
+        // Build Request URL
+        String url = PushUtils.URL_GET_STUDY_FIELDS;
+        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_SECTIONS_ID, "" + departmentId, url);
+        JsonArrayRequest request = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -336,7 +353,100 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
                         .setAction("RETRY", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                setStudyFieldAdapter();
+                                setStudyFieldAdapter(departmentId);
+                            }
+                        }).show();
+
+                // Hide the progress bar/loading layout
+                loadingForeground.setVisibility(View.GONE);
+            }
+        });
+
+        // Set request retry policy
+        request.setRetryPolicy(
+                new DefaultRetryPolicy(10000,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        // Disable Volley Cache
+        request.setShouldCache(false);
+
+        // Add request to request queue
+        requestQueue.add(request);
+    }
+
+    /**
+     * Set an adapter for the departments spinner with a list of available departments.
+     */
+    private void setDepartmentSpinnerAdapter() {
+        final ArrayList<Department> departments = new ArrayList<>();
+
+        // Show progress dialog
+        loadingForeground.setVisibility(View.VISIBLE);
+
+        // Build the json request
+        JsonArrayRequest request = new JsonArrayRequest(PushUtils.URL_GET_DEPARTMENTS,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+
+                        // Parse JSON Array
+                        try {
+                            for(int i = 0; i < response.length(); i++){
+                                // Get a json object from the list/array
+                                JSONObject jsonStudyField = (JSONObject) response.get(i);
+
+                                // Map the json object to StudyField
+                                // and add it to the array list
+                                departments.add(new Department(
+                                        Integer.valueOf(jsonStudyField.getString("id")),
+                                        jsonStudyField.getString("name")
+                                ));
+                            }
+                        } catch (JSONException exception){
+                            exception.printStackTrace();
+                        }
+
+                        // Build Adapter for Spinner
+                        ArrayAdapter<Department> studyFieldArrayAdapter = new ArrayAdapter<>(getContext(),
+                                android.R.layout.simple_spinner_item,
+                                departments);
+                        studyFieldArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                        // Set adapter for StudyField Spinner
+                        departmentSpinner.setAdapter(studyFieldArrayAdapter);
+
+                        // Hide the progress layout
+                        loadingForeground.setVisibility(View.GONE);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+
+                String errorMessage = "Unknown Error!";
+
+                // Set the errorMessage based on the error type
+                if (error instanceof NoConnectionError) {
+                    errorMessage = "No Connection";
+                } else if (error instanceof TimeoutError) {
+                    errorMessage = "Server took too long to respond";
+                } else if (error instanceof ServerError) {
+                    errorMessage = "The was a problem with the server";
+                } else if (error instanceof NetworkError) {
+                    errorMessage = "Unknown error with the network";
+                } else if (error instanceof ParseError) {
+
+                }
+
+                //  Show error about connection
+                Snackbar.make(getView(), errorMessage, Snackbar.LENGTH_INDEFINITE)
+                        .setAction("RETRY", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                setDepartmentSpinnerAdapter();
                             }
                         }).show();
 
@@ -360,17 +470,23 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-        // Get the selected StudyField object
-        StudyField studyField = (StudyField)adapterView.getItemAtPosition(pos);
 
-        // Save the selected study field
-        editor.putInt(PushUtils.SP_STUDY_FIELD_ID, studyField.id);
-        editor.putString(PushUtils.SP_STUDY_FIELD_CODE, studyField.code);
-        editor.apply();
+        if (adapterView.getId() == R.id.department_spinner) {
+            setStudyFieldAdapter(((Department)adapterView.getItemAtPosition(pos)).getId());
+            this.view.findViewById(R.id.study_field_layout).setVisibility(View.VISIBLE);
+        } else {
+            // Get the selected StudyField object
+            StudyField studyField = (StudyField)adapterView.getItemAtPosition(pos);
 
-        // Reveal Year and Section layout
-        this.view.findViewById(R.id.year_layout).setVisibility(View.VISIBLE);
-        this.view.findViewById(R.id.section_layout).setVisibility(View.VISIBLE);
+            // Save the selected study field
+            editor.putInt(PushUtils.SP_STUDY_FIELD_ID, studyField.id);
+            editor.putString(PushUtils.SP_STUDY_FIELD_CODE, studyField.code);
+            editor.apply();
+
+            // Reveal Year and Section layout
+            this.view.findViewById(R.id.year_layout).setVisibility(View.VISIBLE);
+            this.view.findViewById(R.id.section_layout).setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -389,15 +505,15 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
             Snackbar.make(view, "You need to accept the permissions",
                     Snackbar.LENGTH_INDEFINITE).
                     setAction("TRY AGAIN", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Request Permission
-                    requestPermissions(
-                            new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            222
-                    );
-                }
-            }).show();
+                        @Override
+                        public void onClick(View view) {
+                            // Request Permission
+                            requestPermissions(
+                                    new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    222
+                            );
+                        }
+                    }).show();
         }
     }
 
@@ -415,6 +531,29 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
 
         @Override
         public String toString(){
+            return name;
+        }
+    }
+
+    class Department {
+        int id;
+        String name;
+
+        public Department(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public String toString() {
             return name;
         }
     }

@@ -58,6 +58,7 @@ public class PushUtils {
     public static final String API_PARAMS_ANNOUNCEMENTS_COURSE_SECTION = "course_section";
     public static final String API_PARAMS_MATERIALS_COURSE_SECTION = "course_section";
     public static final String API_PARAMS_MATERIALS_ID = "id";
+    public static final String API_PARAMS_SECTIONS_ID = "id";
 
     // API Request URLs
     /*// Local
@@ -78,7 +79,7 @@ public class PushUtils {
 
     // Online
     // Returns list of study fields
-    public static final String URL_GET_STUDY_FIELDS = "http://aaupush.com/api/study_fields";
+    public static final String URL_GET_STUDY_FIELDS = "http://aaupush.com/api/study_fields/?";
     // List of announcements
     public static final String URL_GET_ANNOUNCEMENTS = "http://aaupush.com/api/announcements/?";
     // List of materials
@@ -91,6 +92,8 @@ public class PushUtils {
     public static final String URL_GET_SECTIONS = "http://aaupush.com/api/sections/?";
     // Download a file
     public static final String URL_DOWNLOAD = "http://aaupush.com/file/";
+    // Department List
+    public static final String URL_GET_DEPARTMENTS = "http://aaupush.com/api/departments/?";
 
     // Folder name
     public static final String ROOT_FOLDER = "AAUPush";
