@@ -43,4 +43,5 @@
     <string name="course_list_title">Check/Uncheck The Course To Add/Drop</string>
     <string name="courses_i_m_taking">COURSES I\'M TAKING</string>
     <string name="add_course">ADD COURSE</string>
+    <string name="finish">FINISH</string>
 </resources>
