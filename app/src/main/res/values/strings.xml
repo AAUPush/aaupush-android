@@ -39,4 +39,5 @@
     <string name="hide_full_post">HIDE FULL POST</string>
     <string name="select_department">Select Department</string>
     <string name="add_drop_courses">Add / Drop Courses</string>
+    <string name="section_list_title">Find the course you\'d like to add</string>
 </resources>

@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaupush.aaupush.Course;
@@ -75,6 +76,9 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
     // Main RecyclerView
     RecyclerView mainRV;
 
+    // Recycler Title TextView
+    TextView listTitle;
+
     // Root View
     View view;
 
@@ -125,6 +129,7 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
 
         // Link Views
         mainRV = (RecyclerView)view.findViewById(R.id.course_section_rv);
+        listTitle = (TextView)view.findViewById(R.id.list_title);
         Button finishButton = (Button)view.findViewById(R.id.finish_setup_btn);
         Button followMoreButton = (Button)view.findViewById(R.id.follow_more_btn);
         Button coursesImFollowingButton = (Button)view.findViewById(R.id.courses_im_following);
@@ -134,14 +139,21 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
         followMoreButton.setOnClickListener(this);
         coursesImFollowingButton.setOnClickListener(this);
 
-        // Hide follow more button based on the fragment mode
+        // Hide follow more button based on the fragment mode and set the title of the list
         if (fragmentMode == MODE_SECTIONS) {
+            listTitle.setText(R.string.section_list_title);
             followMoreButton.setVisibility(View.INVISIBLE);
         }
 
-        // Hide coursesImFollowing button based on fragment mode
+        // Hide coursesImFollowing button based on fragment mode and set the title of the list
         if (fragmentMode == MODE_FOLLOWING_COURSES) {
+            listTitle.setText("Check/Uncheck the course to add/drop");
             coursesImFollowingButton.setVisibility(View.GONE);
+        }
+
+        // Set the title of the list
+        if (fragmentMode == MODE_COURSES) {
+            listTitle.setText("Check/Uncheck the course to add/drop");
         }
 
         // Set up mainRV
