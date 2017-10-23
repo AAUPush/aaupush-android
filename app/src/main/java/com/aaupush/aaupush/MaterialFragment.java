@@ -166,7 +166,6 @@ public class MaterialFragment extends Fragment {
      */
     private void setAdapter() {
         ArrayList<Object> sampleList = new ArrayList<>();
-        sampleList.add("LATEST");   // Add the header for the latest materials
         DBHelper dbHelper = new DBHelper(getContext());
 
         // Get materials
@@ -174,6 +173,7 @@ public class MaterialFragment extends Fragment {
 
         // Add them to the adapter if the result is not null
         if (materials != null) {
+            sampleList.add("LAST 7 DAYS");   // Add the header for the latest materials
             sampleList.addAll(materials);
         }
 
