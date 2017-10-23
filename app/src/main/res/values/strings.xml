@@ -40,4 +40,5 @@
     <string name="select_department">Select Department</string>
     <string name="add_drop_courses">Add / Drop Courses</string>
     <string name="section_list_title">Find the course you\'d like to add</string>
+    <string name="course_list_title">Check/Uncheck the course to add/drop</string>
 </resources>

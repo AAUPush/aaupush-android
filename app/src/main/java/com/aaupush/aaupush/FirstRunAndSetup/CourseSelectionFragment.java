@@ -147,13 +147,13 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
 
         // Hide coursesImFollowing button based on fragment mode and set the title of the list
         if (fragmentMode == MODE_FOLLOWING_COURSES) {
-            listTitle.setText("Check/Uncheck the course to add/drop");
+            listTitle.setText(R.string.course_list_title);
             coursesImFollowingButton.setVisibility(View.GONE);
         }
 
         // Set the title of the list
         if (fragmentMode == MODE_COURSES) {
-            listTitle.setText("Check/Uncheck the course to add/drop");
+            listTitle.setText(R.string.course_list_title);
         }
 
         // Set up mainRV
