@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:text="FOLLOW MORE COURSES"
+                android:text="@string/add_course"
                 />
 
             <Button
@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:text="@string/show_courses_im_following"
+                android:text="@string/courses_i_m_taking"
                 />
 
             <Button
