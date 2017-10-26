@@ -208,6 +208,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolder.getMaterialFormat().setImageResource(R.drawable.ic_word);
                 break;
             case "PPTX":
+            case "PPT":
             case "POWER_POINT":
                 viewHolder.getMaterialFormat().setImageResource(R.drawable.ic_power_point);
                 break;
