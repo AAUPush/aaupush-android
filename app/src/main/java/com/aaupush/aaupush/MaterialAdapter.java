@@ -268,6 +268,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
                         openFile.setDataAndType(uri, type);
+                        openFile.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         try {
                             context.getApplicationContext().startActivity(openFile);
                         } catch (ActivityNotFoundException e) {
