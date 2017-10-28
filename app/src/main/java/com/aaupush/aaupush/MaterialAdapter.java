@@ -240,7 +240,10 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
                 else if (material.getAvailableOfflineStatus() == Material.MATERIAL_DOWNLOADING) {
                     DownloadManager downloadManager = (DownloadManager)context.getSystemService(Context.DOWNLOAD_SERVICE);
-                    downloadManager.remove(material.getDownloadID());
+                    int noOfRemovedDownloads = downloadManager.remove(material.getDownloadID());
+                    Log.d(TAG, "Removed downloads - " + noOfRemovedDownloads);
+                    // Show a Toast Message
+                    Toast.makeText(context, "Download Canceled", Toast.LENGTH_SHORT).show();
                 }
                 else if (material.getAvailableOfflineStatus() == Material.MATERIAL_AVAILABLE_OFFLINE) {
                     Intent openFile = new Intent(Intent.ACTION_VIEW);

@@ -237,6 +237,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 material.setOfflineLocation(cursor.getString(7));
             }
 
+            // Set the download ID if the material is currently being downloaded
+            if (Material.MATERIAL_DOWNLOADING == cursor.getInt(6)) {
+                material.setDownloadID(cursor.getLong(9));
+            }
+
             // Add the Material object to the ArrayList
             materials.add(material);
         }
@@ -295,6 +300,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
             if (Material.MATERIAL_AVAILABLE_OFFLINE == cursor.getInt(6)){
                 material.setOfflineLocation(cursor.getString(7));
+            }
+
+            // Set the download ID if the material is currently being downloaded
+            if (Material.MATERIAL_DOWNLOADING == cursor.getInt(6)) {
+                material.setDownloadID(cursor.getLong(9));
             }
 
             // Add the Material object to the ArrayList
