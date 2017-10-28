@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,9 @@ import java.util.Locale;
 
 
 public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    // Log TAG
+    private static final String TAG = "MaterialAdapter";
 
     // Static variables that represent if a view is
     // a Folder, Material or a Header
