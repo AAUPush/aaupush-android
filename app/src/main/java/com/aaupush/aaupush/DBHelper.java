@@ -254,8 +254,8 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Retrieves the latest 3 materials from the database
-     * @return ArrayList containing the latest 3 materials
+     * Retrieves materials uploaded in the last 7 days
+     * @return ArrayList containing materials uploaded in the last 7 days
      */
     public ArrayList<Material> getLatestMaterials() {
         // Get a readable database instance
