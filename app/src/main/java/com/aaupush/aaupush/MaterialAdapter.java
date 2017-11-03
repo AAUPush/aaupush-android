@@ -159,7 +159,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         // Get file Size
         String fileSize;
         if (material.getFileSize() > 1000) {
-            fileSize = String.format(Locale.ENGLISH, "%1.2f", material.getFileSize() * 1000);
+            fileSize = String.format(Locale.ENGLISH, "%1.2f", material.getFileSize()/1024);
             fileSize += " MB";
         } else {
             fileSize = String.format(Locale.ENGLISH, "%1.0f", material.getFileSize());
