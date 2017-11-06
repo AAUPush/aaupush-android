@@ -381,9 +381,6 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
                                 JSONObject json = (JSONObject) response.get(i);
                                 String sectionCode = json.getString("code");
 
-                                // Don't add sections within the same year
-                                if (sectionCode.contains("Y" + year)) continue;
-
                                 sections.add(sectionCode);
 
                             }
