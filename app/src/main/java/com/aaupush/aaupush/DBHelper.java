@@ -264,12 +264,12 @@ public class DBHelper extends SQLiteOpenHelper {
         // Date Argument
         // We want to get all the materials uploaded in the last 7 days
         Calendar sevenDaysAgo = Calendar.getInstance();
-        sevenDaysAgo.add(Calendar.MONTH, -7);
+        sevenDaysAgo.add(Calendar.DAY_OF_MONTH, -7);
         String pubDate = PushUtils.calendarToString(sevenDaysAgo, true);
 
         // Cursor get the cursor after the querying the db
         Cursor cursor = sqLiteDatabase.rawQuery(
-                "SELECT * FROM " + MATERIAL_TABLE_NAME + " WHERE " + MATERIAL_PUB_DATE + " > " + Long.parseLong(pubDate) + " ORDER BY " + MATERIAL_PUB_DATE,
+                "SELECT * FROM " + MATERIAL_TABLE_NAME + " WHERE " + MATERIAL_PUB_DATE + " > " + Long.parseLong(pubDate) + " ORDER BY " + MATERIAL_PUB_DATE + " DESC",
                 null
         );
 
