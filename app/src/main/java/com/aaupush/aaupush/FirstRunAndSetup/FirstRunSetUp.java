@@ -3,6 +3,7 @@ package com.aaupush.aaupush.FirstRunAndSetup;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -24,6 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.aaupush.aaupush.DBHelper;
+import com.aaupush.aaupush.MainActivity;
 import com.aaupush.aaupush.PushUtils;
 import com.aaupush.aaupush.R;
 import com.android.volley.DefaultRetryPolicy;
@@ -200,14 +203,8 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
                             public void onResponse(String response) {
                                 // Output the response to log
                                 if (response.equals("true")) {
-                                    // Go to course selection fragment
-                                    FragmentManager fragmentManager = getFragmentManager();
-                                    fragmentManager
-                                            .beginTransaction()
-                                            .replace(R.id.first_run_activity,
-                                                    CourseSelectionFragment.newInstance(sectionCode, true))
-                                            .addToBackStack(null)
-                                            .commit();
+                                    // Add the default courses to the database
+                                    addDefaultCourses();
 
                                 } else {
                                     // Output error about year section combination not existing
@@ -465,6 +462,124 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
         request.setShouldCache(false);
 
         // Add request to request queue
+        requestQueue.add(request);
+    }
+
+    /**
+     * Add the default courses to the db
+     */
+    private void addDefaultCourses() {
+        // Get the chosen study field id
+        int studyFieldID = preferences.getInt(PushUtils.SP_STUDY_FIELD_ID, 1);
+
+        // Show progress bar
+        loadingForeground.setVisibility(View.VISIBLE);
+
+        // Make JSONArrayRequest and get the list of courses
+        // Base request URL
+        String url = PushUtils.URL_GET_COURSES;
+        final String sectionCode = preferences.getString(PushUtils.SP_SECTION_CODE, "CSY1S1");
+
+        // Append GET parameters
+        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_COURSES_SECTION, sectionCode, url);
+        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_COURSES_STUDY_FIELD, studyFieldID + "", url);
+
+        // Build the request
+        JsonArrayRequest request = new JsonArrayRequest(url,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        // Output the response to the log
+                        Log.d(TAG, response.toString());
+
+                        // Parse the JSON Array
+                        try {
+                            // Check if the array is not empty
+                            if (response.length() < 1){
+                                Log.d(TAG, "Request returned empty JSON Array");
+
+                                // Show Error Message
+                                Snackbar.make(view,
+                                        "This section does not contain any courses. Go back and choose a different section",
+                                        Snackbar.LENGTH_INDEFINITE).show();
+
+                                return; // Exit if array is empty
+                            }
+
+                            // Init DBHelper Object
+                            DBHelper dbHelper = new DBHelper(getContext().getApplicationContext());
+
+                            // Loop through every JSON object in the array
+                            for (int i = 0; i < response.length(); i++){
+                                // Get a JSON object from the array
+                                JSONObject json = (JSONObject) response.get(i);
+
+                                // Add the course to the fragment
+                                dbHelper.addCourse(json.getInt("id"), json.getString("name"), sectionCode);
+                            }
+
+                            // Save state about finishing FirstRun and Setup
+                            preferences.edit().putBoolean(PushUtils.SP_IS_FIRST_RUN, false).apply();
+
+                            // Start MainActivity
+                            startActivity(new Intent(getContext(), MainActivity.class));
+
+
+                            // Hide progress bar
+                            loadingForeground.setVisibility(View.GONE);
+
+
+
+                        } catch (JSONException exception){
+                            exception.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+
+                        String errorMessage = "Unknown Error!";
+
+                        // Set the errorMessage based on the error type
+                        if (error instanceof NoConnectionError) {
+                            errorMessage = "No Connection";
+                        } else if (error instanceof TimeoutError) {
+                            errorMessage = "Server took too long to respond";
+                        } else if (error instanceof ServerError) {
+                            errorMessage = "There was a problem with the server";
+                        } else if (error instanceof NetworkError) {
+                            errorMessage = "Unknown error with the network";
+                        } else if (error instanceof ParseError) {
+
+                        }
+
+                        Log.e(TAG, "VolleyError in setCourseAdapter: " + errorMessage);
+
+                        Snackbar.make(view, errorMessage, Snackbar.LENGTH_INDEFINITE)
+                                .setAction("RETRY", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        addDefaultCourses();
+                                    }
+                                }).show();
+
+                        // Hide progress bar
+                        loadingForeground.setVisibility(View.GONE);
+                    }
+                });
+
+        // Set request retry policy
+        request.setRetryPolicy(
+                new DefaultRetryPolicy(10000,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        // Disable Volley Cache
+        request.setShouldCache(false);
+
+        // Add to the request queue
         requestQueue.add(request);
     }
 
