@@ -233,7 +233,8 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         viewHolder.getDownloadOpenBtn().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: start download, open file or cancel download
+                // start download, open file or cancel download
+
                 if (material.getAvailableOfflineStatus() == Material.MATERIAL_NOT_AVAILABLE) {
                     Toast.makeText(context, "Starting Download", Toast.LENGTH_SHORT).show();
                     PushService.downloadMaterial(material, context);
@@ -242,8 +243,18 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     DownloadManager downloadManager = (DownloadManager)context.getSystemService(Context.DOWNLOAD_SERVICE);
                     int noOfRemovedDownloads = downloadManager.remove(material.getDownloadID());
                     Log.d(TAG, "Removed downloads - " + noOfRemovedDownloads);
-                    // Show a Toast Message
-                    Toast.makeText(context, "Download Canceled", Toast.LENGTH_SHORT).show();
+
+                    if (noOfRemovedDownloads > 0) { // If there is/are removed downloads
+                        // Show a Toast Message
+                        Toast.makeText(context, "Download Canceled", Toast.LENGTH_SHORT).show();
+
+                        // Update the db to set the material as unavailable
+                        dbHelper.setMaterialDownloadStatus(material.getMaterialId(), Material.MATERIAL_NOT_AVAILABLE, 0, null);
+
+                        // Send a broadcast to the fragment to refresh the materials list
+                        // TODO: Change MATERIAL_DOWNLOAD_COMPLETED_BROADCAST to DOWNLOAD_CANCELED
+                        context.sendBroadcast(new Intent(PushUtils.MATERIAL_DOWNLOAD_COMPLETED_BROADCAST));
+                    }
                 }
                 else if (material.getAvailableOfflineStatus() == Material.MATERIAL_AVAILABLE_OFFLINE) {
                     Intent openFile = new Intent(Intent.ACTION_VIEW);
