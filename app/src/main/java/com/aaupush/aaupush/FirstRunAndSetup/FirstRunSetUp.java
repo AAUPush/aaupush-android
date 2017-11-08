@@ -212,6 +212,10 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
                                             "The Year-Section combination you chose does not exist",
                                             Snackbar.LENGTH_LONG).show();
                                     loadingForeground.setVisibility(View.GONE);
+
+                                    // finish activity, so that user can't return to this fragment
+                                    // while pressing back
+                                    getActivity().finish();
                                 }
 
                             }
