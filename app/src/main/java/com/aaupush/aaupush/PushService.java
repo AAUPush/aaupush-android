@@ -648,6 +648,20 @@ public class PushService extends Service {
                 material.getTitle() + "." + material.getFileFormat()
         );
 
+        // Check if material have already been downloaded
+        if  (file.exists()) {
+            // Instead of downloading the file, just update the db and
+            // broadcast download finished
+            dbHelper.setMaterialDownloadStatus(
+                    material.getMaterialId(),
+                    Material.MATERIAL_AVAILABLE_OFFLINE,
+                    0L, Uri.fromFile(file).toString()
+            );
+
+            // Send broadcast
+            context.sendBroadcast(new Intent(PushUtils.MATERIAL_DOWNLOAD_COMPLETED_BROADCAST));
+            return material;
+        }
 
         DownloadManager.Request request = new DownloadManager.Request(
                 Uri.parse(downloadUrl));
