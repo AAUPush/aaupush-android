@@ -4,6 +4,8 @@ import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -141,7 +143,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         viewHolder.getMaterialFormat().setImageResource(R.drawable.ic_folder);
     }
 
-    private void configureMaterial(MaterialViewHolder viewHolder, int position){
+    private void configureMaterial(final MaterialViewHolder viewHolder, int position){
         // Get the material from the list
         final Material material = (Material) list.get(position);
 
@@ -199,6 +201,80 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 );
                 viewHolder.getDownloadProgressBar().setVisibility(View.VISIBLE);
                 break;
+        }
+
+        // Set Progress Listener for downloading materials
+        if (material.getAvailableOfflineStatus() == Material.MATERIAL_DOWNLOADING) {
+
+            Thread progressThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    while (true) {
+                        // Get the download manager service
+                        DownloadManager downloadManager =
+                                (DownloadManager)context.getSystemService(Context.DOWNLOAD_SERVICE);
+
+                        // Query the download manager and get the cursor
+                        Cursor cursor = downloadManager.query(new DownloadManager.Query().setFilterById(material.getDownloadID()));
+
+                        // Check if such download(download id of the material) exists in the downloads db
+                        if (cursor != null && cursor.getCount() > 0) {
+                            cursor.moveToNext();
+                            Log.d(TAG, "Downloading Material - " + cursor.getCount());
+
+                            // Get total file size
+                            float totalFileSize = material.getFileSize()*1000;
+
+                            /*try {
+                                totalFileSize = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                                Log.d(TAG, "total file size - " + totalFileSize);
+                            } catch (CursorIndexOutOfBoundsException e) {
+                                totalFileSize = -1;
+                                Log.e(TAG, e.getMessage());
+                            }
+*/
+                            // Check if download has begun
+                            if (totalFileSize != -1) {
+                                // Set the maximum value of the progress bar
+                                /*viewHolder.getDownloadProgressBar().setMax(100);
+                                viewHolder.getDownloadProgressBar().setIndeterminate(false);*/
+
+                                // Get downloaded so far and calculate the percentage
+                                float downloadedSoFar = cursor.getFloat(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                                float downloadedPercentage = downloadedSoFar * 100;
+                                downloadedPercentage /= totalFileSize;
+
+                                if (downloadedPercentage == 0) {
+                                    if (!viewHolder.getDownloadProgressBar().isIndeterminate()) {
+                                        viewHolder.getDownloadProgressBar().setIndeterminate(true);
+                                    }
+                                }
+
+                                Log.d(TAG, "Download Percentage - " + downloadedPercentage);
+                                if (downloadedPercentage > 99) {
+                                    break;
+                                }
+
+
+                                viewHolder.getDownloadProgressBar().setProgress((int)downloadedPercentage);
+                            }
+                        } else {
+                            //break;
+                        }
+
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+            });
+
+            progressThread.start();
+
         }
 
         // Set file format image

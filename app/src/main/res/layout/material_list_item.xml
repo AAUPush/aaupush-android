@@ -57,16 +57,24 @@
 
             <ImageButton
                 android:id="@+id/download_open_btn"
+                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/ic_file_download"
-                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"/>
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/ic_file_download" />
 
             <ProgressBar
                 android:id="@+id/download_progress_bar"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:progress="50"
+                android:layout_height="wrap_content"
+                android:progress="20"
+                android:max="100"
+                android:foregroundGravity="bottom"
+                android:layout_alignParentBottom="true"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:indeterminate="false"
                 android:visibility="gone"
                 />
 
