@@ -9,8 +9,8 @@ android {
         applicationId "com.aaupush.aaupush"
         minSdkVersion 10
         targetSdkVersion 25
-        versionCode 4
-        versionName '0.94 - Beta - Revision 4'
+        versionCode 5
+        versionName '1.00'
     }
     buildTypes {
         release {

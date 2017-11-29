@@ -245,10 +245,20 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 float downloadedPercentage = downloadedSoFar * 100;
                                 downloadedPercentage /= totalFileSize;
 
-                                if (downloadedPercentage == 0) {
-                                    if (!viewHolder.getDownloadProgressBar().isIndeterminate()) {
-                                        viewHolder.getDownloadProgressBar().setIndeterminate(true);
-                                    }
+                                if (downloadedPercentage == 0 && !viewHolder.getDownloadProgressBar().isIndeterminate()) {
+                                    viewHolder.getDownloadProgressBar().post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            viewHolder.getDownloadProgressBar().setIndeterminate(true);
+                                        }
+                                    });
+                                } else if(downloadedPercentage >= 1 && viewHolder.getDownloadProgressBar().isIndeterminate()) {
+                                    viewHolder.getDownloadProgressBar().post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            viewHolder.getDownloadProgressBar().setIndeterminate(false);
+                                        }
+                                    });
                                 }
 
                                 Log.d(TAG, "Download Percentage - " + downloadedPercentage);
@@ -264,7 +274,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         }
 
                         try {
-                            Thread.sleep(500);
+                            Thread.sleep(50);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
