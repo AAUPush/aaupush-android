@@ -450,6 +450,8 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
         ArrayList<com.aaupush.aaupush.Course> courses = dbHelper.getCourses();
         ArrayList<Object> list = new ArrayList<>();
 
+        if (courses == null) return;
+
         for (com.aaupush.aaupush.Course course: courses) {
             list.add(new Course(course.getCourseID(), course.getName(), course.getSectionCode(), true));
         }
