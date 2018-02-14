@@ -505,6 +505,11 @@ public class DBHelper extends SQLiteOpenHelper {
         database.delete(COURSE_TABLE_NAME,
                 COURSE_ID + " = ? AND " + COURSE_SECTION + " = ?",
                 new String[] {courseID + "", sectionCode});
+
+        // Remove related materials as well
+        database.delete(MATERIAL_TABLE_NAME,
+                MATERIAL_COURSE_ID + " = ?",
+                new String[] {courseID + ""});
         database.close();
     }
 
