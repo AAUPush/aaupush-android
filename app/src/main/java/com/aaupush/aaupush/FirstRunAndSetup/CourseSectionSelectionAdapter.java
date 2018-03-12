@@ -95,7 +95,7 @@ public class CourseSectionSelectionAdapter extends RecyclerView.Adapter<Recycler
 
     @Override
     public int getItemViewType(int position) {
-        if (list.get(position) instanceof String){
+        if (list.get(position) instanceof CourseSelectionFragment.Section){
             return TYPE_SECTION;
         } else if (list.get(position) instanceof CourseSelectionFragment.Course){
             return TYPE_COURSE;
@@ -150,13 +150,13 @@ public class CourseSectionSelectionAdapter extends RecyclerView.Adapter<Recycler
 
     private void configureSection(CheckableViewHolder viewHolder, int position) {
         // Get the section code from the list
-        final String section = (String)list.get(position);
+        final CourseSelectionFragment.Section section = (CourseSelectionFragment.Section) list.get(position);
 
         // Hide the checkbox
         viewHolder.getCheckBox().setVisibility(View.GONE);
 
         // Set the section code to the text view
-        viewHolder.getTextView().setText(section);
+        viewHolder.getTextView().setText(section.sectionCode);
 
         // Set on click listener on the text view
         viewHolder.getTextView().setOnClickListener(new View.OnClickListener() {
@@ -164,7 +164,7 @@ public class CourseSectionSelectionAdapter extends RecyclerView.Adapter<Recycler
             public void onClick(View view) {
                 // Send a broadcast with an intent extra of section code
                 Intent clickedOnSectionBroadcast = new Intent(PushUtils.CLICKED_ON_SECTION_BROADCAST);
-                clickedOnSectionBroadcast.putExtra("section_code", section);
+                clickedOnSectionBroadcast.putExtra("section_id", section.id);
                 view.getContext().getApplicationContext().sendBroadcast(clickedOnSectionBroadcast);
             }
         });

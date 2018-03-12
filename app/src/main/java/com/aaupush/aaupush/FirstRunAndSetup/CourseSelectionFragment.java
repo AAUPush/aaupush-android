@@ -181,6 +181,12 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
             fragmentFrameID = R.id.first_run_activity;
         }
 
+        // Reset Material and Announcement ID counter
+        SharedPreferences.Editor editor = getContext().getSharedPreferences(PushUtils.SP_KEY_NAME, Context.MODE_PRIVATE).edit();
+        editor.putInt(PushUtils.SP_LAST_ANNOUNCEMENT_RECEIVED_ID, 0);
+        editor.putInt(PushUtils.SP_LAST_MATERIAL_RECEIVED_ID, 0);
+        editor.apply();
+
         switch (view.getId()) {
             case R.id.follow_more_btn:
 
@@ -225,9 +231,6 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
 
     // Set adapter to the mainRV with Course Items
     private void setCourseAdapter() {
-        // Get the chosen study field id
-        int studyFieldID = preferences.getInt(PushUtils.SP_STUDY_FIELD_ID, 1);
-
         // Show progress bar
         view.findViewById(R.id.course_rv_progress_bar).setVisibility(View.VISIBLE);
 
@@ -236,8 +239,7 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
         String url = PushUtils.URL_GET_COURSES;
 
         // Append GET parameters
-        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_COURSES_SECTION, sectionCode, url);
-        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_COURSES_STUDY_FIELD, studyFieldID + "", url);
+        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_COURSES_SECTIONS, sectionCode, url);
 
         final ArrayList<Object> courses = new ArrayList<>();
 
@@ -380,8 +382,9 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
                                 // Get a JSON object from the array
                                 JSONObject json = (JSONObject) response.get(i);
                                 String sectionCode = json.getString("code");
+                                int sectionId = json.getInt("id");
 
-                                sections.add(sectionCode);
+                                sections.add(new Section(sectionId, sectionCode));
 
                             }
                             CourseSectionSelectionAdapter adapter = new CourseSectionSelectionAdapter(sections);
@@ -524,7 +527,7 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(PushUtils.CLICKED_ON_SECTION_BROADCAST)) {
-                String section_code = intent.getStringExtra("section_code");
+                int section_id = intent.getIntExtra("section_id", 1);
                 FragmentManager fragmentManager = getFragmentManager();
 
                 // Get which activity is fragment being hosted
@@ -539,7 +542,7 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
                 fragmentManager
                         .beginTransaction()
                         .replace(fragmentFrameID,
-                                CourseSelectionFragment.newInstance(section_code, false))
+                                CourseSelectionFragment.newInstance(section_id + "", false))
                         .addToBackStack(null)
                         .commit();
             }
@@ -562,6 +565,17 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
             this.courseName = courseName;
             this.sectionCode = sectionCode;
             this.isInPrimarySection = isInPrimarySection;
+        }
+    }
+
+    // Temporary Section class
+    class Section {
+        int id;
+        String sectionCode;
+
+        public Section(int id, String sectionCode) {
+            this.id = id;
+            this.sectionCode = sectionCode;
         }
     }
 
