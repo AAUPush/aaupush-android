@@ -19,7 +19,6 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
@@ -191,7 +190,7 @@ public class PushService extends Service {
         // Build the course_section param value
         String courseSectionBundle = "";
         for (Course course : courses) {
-            courseSectionBundle += course.getCourseID() + ":" + course.getSectionCode() + "-";
+            courseSectionBundle += course.getSectionCode() + ":" + course.getCourseID() + "-";
         }
 
         // Close the db object
@@ -202,7 +201,7 @@ public class PushService extends Service {
 
         // append parameters
         url = PushUtils.appendGetParameter("id", String.valueOf(lastAnnouncementID), url);
-        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_ANNOUNCEMENTS_COURSE_SECTION,
+        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_ANNOUNCEMENTS_SECTION_COURSE,
                 courseSectionBundle,
                 url);
 
@@ -397,7 +396,7 @@ public class PushService extends Service {
         // Build the course_section param value
         String courseSectionBundle = "";
         for (Course course : courses) {
-            courseSectionBundle += course.getCourseID() + ":" + course.getSectionCode() + "-";
+            courseSectionBundle += course.getSectionCode() + ":" + course.getCourseID() + "-";
         }
 
         // Close the db object
@@ -411,7 +410,7 @@ public class PushService extends Service {
 
         // Append GET Materials
         url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_MATERIALS_ID, lastMaterialID + "", url);
-        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_MATERIALS_COURSE_SECTION, courseSectionBundle, url);
+        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_MATERIALS_SECTION_COURSE, courseSectionBundle, url);
 
         // Output the constructed url to the log
         Log.d(TAG, "Material Request URL - " + url);

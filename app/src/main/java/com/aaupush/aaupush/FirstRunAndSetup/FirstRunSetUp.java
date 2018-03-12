@@ -391,8 +391,7 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
         // Make JSONArrayRequest and get the list of courses
         // Base request URL
         String url = PushUtils.URL_GET_COURSES;
-        int sectionId = preferences.getInt(PushUtils.SP_SECTION_ID, 1);
-        final String sectionCode = preferences.getString(PushUtils.SP_SECTION_CODE, "CoScY1S1");
+        final int sectionId = preferences.getInt(PushUtils.SP_SECTION_ID, 1);
 
         // Append GET parameters
         url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_COURSES_SECTIONS, sectionId + "", url);
@@ -432,7 +431,7 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
                                 JSONObject json = (JSONObject) response.get(i);
 
                                 // Add the course to the fragment
-                                dbHelper.addCourse(json.getInt("id"), json.getString("name"), sectionCode);
+                                dbHelper.addCourse(json.getInt("id"), json.getString("name"), String.valueOf(sectionId));
                             }
 
                             // Save state about finishing FirstRun and Setup

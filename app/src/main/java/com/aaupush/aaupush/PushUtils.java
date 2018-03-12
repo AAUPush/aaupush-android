@@ -60,7 +60,9 @@ public class PushUtils {
     public static final String API_PARAMS_COURSES_SECTIONS = "sections";
     public static final String API_PARAMS_SECTIONS_STUDY_FIELD_ID = "study_field_id";
     public static final String API_PARAMS_ANNOUNCEMENTS_COURSE_SECTION = "course_section";
+    public static final String API_PARAMS_ANNOUNCEMENTS_SECTION_COURSE = "section_course";
     public static final String API_PARAMS_MATERIALS_COURSE_SECTION = "course_section";
+    public static final String API_PARAMS_MATERIALS_SECTION_COURSE = "section_course";
     public static final String API_PARAMS_MATERIALS_ID = "id";
     public static final String API_PARAMS_SECTIONS_ID = "id";
     public static final String API_PARAMS_DEPARTMENT = "department";
