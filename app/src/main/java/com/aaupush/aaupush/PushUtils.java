@@ -33,6 +33,9 @@ public class PushUtils {
     public static final String SP_ANNOUNCEMENT_NOTIFICATION_ENABLED = "announcement_notification_enabled";
     public static final String SP_MATERIAL_NOTIFICATION_ENABLED = "material_notification_enabled";
     public static final String SP_BACKGROUND_REFRESH_INTERVAL = "background_refresh_interval";
+    public static final String SP_DEPARTMENT_CODE = "department_code";
+    public static final String SP_DEPARTMENT_ID = "department_id";
+    public static final String SP_SECTION_ID = "section_id";
 
     // BroadCast
     static final String NEW_ANNOUNCEMENT_BROADCAST = "com.aaupush.aaupush.NEW_ANNOUNCEMENT";
@@ -54,11 +57,13 @@ public class PushUtils {
     // API Request URL Parameter Names
     public static final String API_PARAMS_COURSES_STUDY_FIELD = "study_field";
     public static final String API_PARAMS_COURSES_SECTION = "section";
+    public static final String API_PARAMS_COURSES_SECTIONS = "sections";
     public static final String API_PARAMS_SECTIONS_STUDY_FIELD_ID = "study_field_id";
     public static final String API_PARAMS_ANNOUNCEMENTS_COURSE_SECTION = "course_section";
     public static final String API_PARAMS_MATERIALS_COURSE_SECTION = "course_section";
     public static final String API_PARAMS_MATERIALS_ID = "id";
     public static final String API_PARAMS_SECTIONS_ID = "id";
+    public static final String API_PARAMS_DEPARTMENT = "department";
 
     // API Request URLs
     /*// Local

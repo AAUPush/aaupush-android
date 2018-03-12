@@ -176,97 +176,8 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
                     return;
                 }
 
-                // Get the list of course and add them to the db
-                // Build the request URL
-                String url = PushUtils.URL_SECTION_EXISTS;
-
-                // Get the study field of the student
-                String studyField = preferences.getString(PushUtils.SP_STUDY_FIELD_CODE, "CS");
-
-                // Build Section code
-                final String sectionCode = String.format(Locale.ENGLISH, "%sY%sS%s", studyField, enteredYear, enteredSection);
-
-
-                editor.putInt(PushUtils.SP_SELECTED_YEAR, Integer.parseInt(enteredYear));
-                editor.putInt(PushUtils.SP_SELECTED_SECTION, Integer.parseInt(enteredSection));
-                editor.putString(PushUtils.SP_SECTION_CODE, sectionCode);
-                editor.apply();
-
-                // Append GET parameters
-                url = PushUtils.appendGetParameter("section_code", sectionCode, url);
-
-                // Build the json array request
-                StringRequest request = new StringRequest(
-                        url,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                // Output the response to log
-                                if (response.equals("true")) {
-                                    // Add the default courses to the database
-                                    addDefaultCourses();
-
-                                } else {
-                                    // Output error about year section combination not existing
-                                    Snackbar.make(view,
-                                            "The Year-Section combination you chose does not exist",
-                                            Snackbar.LENGTH_LONG).show();
-                                    loadingForeground.setVisibility(View.GONE);
-
-                                    // finish activity, so that user can't return to this fragment
-                                    // while pressing back
-                                    getActivity().finish();
-                                }
-
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-
-                                String errorMessage = "Unknown Error!";
-
-                                // Set the errorMessage based on the error type
-                                if (error instanceof NoConnectionError) {
-                                    errorMessage = "No Connection";
-                                } else if (error instanceof TimeoutError) {
-                                    errorMessage = "Server took too long to respond";
-                                } else if (error instanceof ServerError) {
-                                    errorMessage = "The was a problem with the server";
-                                } else if (error instanceof NetworkError) {
-                                    errorMessage = "Unknown error with the network";
-                                } else if (error instanceof ParseError) {
-
-                                }
-
-                                //  Show error about connection
-                                Snackbar.make(getView(), errorMessage, Snackbar.LENGTH_INDEFINITE)
-                                        .setAction("RETRY", new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                nextBtn.performClick();
-                                            }
-                                        }).show();
-
-                                // Hide the progress dialog after showing an error message
-                                loadingForeground.setVisibility(View.GONE);
-
-                            }
-                        }
-                );
-
-                // Set request retry policy
-                request.setRetryPolicy(
-                        new DefaultRetryPolicy(10000,
-                                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-                // Disable Volley Cache
-                request.setShouldCache(false);
-
-                // Add the request to the request queue
-                requestQueue.add(request);
-
+                // Check if entered section exists
+                checkIfSectionExists(enteredYear, enteredSection);
 
             }
         });
@@ -402,7 +313,8 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
                                 // and add it to the array list
                                 departments.add(new Department(
                                         Integer.valueOf(jsonStudyField.getString("id")),
-                                        jsonStudyField.getString("name")
+                                        jsonStudyField.getString("name"),
+                                        jsonStudyField.getString("code")
                                 ));
                             }
                         } catch (JSONException exception){
@@ -473,20 +385,21 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
      * Add the default courses to the db
      */
     private void addDefaultCourses() {
-        // Get the chosen study field id
-        int studyFieldID = preferences.getInt(PushUtils.SP_STUDY_FIELD_ID, 1);
-
         // Show progress bar
         loadingForeground.setVisibility(View.VISIBLE);
 
         // Make JSONArrayRequest and get the list of courses
         // Base request URL
         String url = PushUtils.URL_GET_COURSES;
-        final String sectionCode = preferences.getString(PushUtils.SP_SECTION_CODE, "CSY1S1");
+        int sectionId = preferences.getInt(PushUtils.SP_SECTION_ID, 1);
+        final String sectionCode = preferences.getString(PushUtils.SP_SECTION_CODE, "CoScY1S1");
 
         // Append GET parameters
-        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_COURSES_SECTION, sectionCode, url);
-        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_COURSES_STUDY_FIELD, studyFieldID + "", url);
+        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_COURSES_SECTIONS, sectionId + "", url);
+        //url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_COURSES_STUDY_FIELD, studyFieldID + "", url);
+
+        // Output get course url to log
+        Log.d(TAG, "Url: " + url);
 
         // Build the request
         JsonArrayRequest request = new JsonArrayRequest(url,
@@ -587,12 +500,137 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
         requestQueue.add(request);
     }
 
+    private void checkIfSectionExists(final String year, final String section) {
+        // Get saved department id
+        int departmentId = preferences.getInt(PushUtils.SP_DEPARTMENT_ID, -1);
+
+        // Get the list of sections within the given department
+        // and check if the inputted section exists
+
+        // Build the request url
+        String url = PushUtils.URL_GET_SECTIONS;
+        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_DEPARTMENT, String.valueOf(departmentId), url);
+
+        // Build the Volley Request
+        JsonArrayRequest request = new JsonArrayRequest(url,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+                        // Section found flag
+                        boolean isSectionFound = false;
+
+                        // Parse JSON Array
+                        try {
+                            // Output the response to the log
+                            Log.d(TAG, "Get Sections API Response: \n" + response);
+
+                            for(int i = 0; i < response.length(); i++){
+
+                                // Get a json object from the list/array
+                                JSONObject jsonSection = (JSONObject) response.get(i);
+
+                                if (jsonSection.getString("code").contains("Y"+year) &&
+                                        jsonSection.getString("code").contains("S"+section)) {
+                                    // Output the selected section to the log
+                                    Log.d(TAG, "Selected Section: " + jsonSection.getString("code"));
+
+                                    // Save the section code and id
+                                    editor.putString(PushUtils.SP_SECTION_CODE, jsonSection.getString("code"));
+                                    editor.putInt(PushUtils.SP_SECTION_ID, jsonSection.getInt("id"));
+
+                                    // Set the section found flag to true
+                                    isSectionFound = true;
+                                }
+
+                            }
+                        } catch (JSONException exception){
+                            exception.printStackTrace();
+                        }
+
+                        // Check the sectionFound flag
+                        if (isSectionFound) {
+                            // Add the default courses in this section
+                            addDefaultCourses();
+                        } else {
+                            // Selected section was not found
+                            //TODO : Change error message from Toast to Snackbar
+                            Toast.makeText(
+                                    getContext(),
+                                    "The Year-Section combination entered is wrong.",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                        }
+
+                        // Hide the progress layout
+                        loadingForeground.setVisibility(View.GONE);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+
+                String errorMessage = "Unknown Error!";
+
+                // Set the errorMessage based on the error type
+                if (error instanceof NoConnectionError) {
+                    errorMessage = "No Connection";
+                } else if (error instanceof TimeoutError) {
+                    errorMessage = "Server took too long to respond";
+                } else if (error instanceof ServerError) {
+                    errorMessage = "The was a problem with the server";
+                } else if (error instanceof NetworkError) {
+                    errorMessage = "Unknown error with the network";
+                } else if (error instanceof ParseError) {
+
+                }
+
+                //  Show error about connection
+                Snackbar.make(getView(), errorMessage, Snackbar.LENGTH_INDEFINITE)
+                        .setAction("RETRY", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                setDepartmentSpinnerAdapter();
+                            }
+                        }).show();
+
+                // Hide the progress bar/loading layout
+                loadingForeground.setVisibility(View.GONE);
+            }
+        });
+
+        // Set request retry policy
+        request.setRetryPolicy(
+                new DefaultRetryPolicy(10000,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        // Disable Volley Cache
+        request.setShouldCache(false);
+
+        // Add request to request queue
+        requestQueue.add(request);
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
 
         if (adapterView.getId() == R.id.department_spinner) {
-            setStudyFieldAdapter(((Department)adapterView.getItemAtPosition(pos)).getId());
-            this.view.findViewById(R.id.study_field_layout).setVisibility(View.VISIBLE);
+            // Get the selected department from the spinner
+            Department department = (Department)adapterView.getItemAtPosition(pos);
+
+            // Save the department code of the selected department to the shared preferences
+            editor.putString(PushUtils.SP_DEPARTMENT_CODE, department.getCode());
+            editor.putInt(PushUtils.SP_DEPARTMENT_ID, department.getId());
+            editor.apply();
+
+            // Reveal Year and Section layout
+            this.view.findViewById(R.id.year_layout).setVisibility(View.VISIBLE);
+            this.view.findViewById(R.id.section_layout).setVisibility(View.VISIBLE);
+
+            //setStudyFieldAdapter(((Department)adapterView.getItemAtPosition(pos)).getId());
+            //this.view.findViewById(R.id.study_field_layout).setVisibility(View.VISIBLE);
         } else {
             // Get the selected StudyField object
             StudyField studyField = (StudyField)adapterView.getItemAtPosition(pos);
@@ -657,10 +695,12 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
     class Department {
         int id;
         String name;
+        String code;
 
-        public Department(int id, String name) {
+        public Department(int id, String name, String code) {
             this.id = id;
             this.name = name;
+            this.code = code;
         }
 
         public int getId() {
@@ -670,6 +710,8 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
         public String getName() {
             return name;
         }
+
+        public String getCode() { return code; }
 
         @Override
         public String toString() {
