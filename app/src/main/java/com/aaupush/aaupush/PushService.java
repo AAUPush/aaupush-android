@@ -244,7 +244,7 @@ public class PushService extends Service {
                                 // Map the JSON object to an Announcement object
 
                                 // Parse postDate and expDate to long values
-                                String postDateString = json.getString("post_date")
+                                String postDateString = json.getString("pub_date")
                                         .replaceAll(" ", "")
                                         .replaceAll("-", "")
                                         .replace(".", "")
@@ -275,7 +275,7 @@ public class PushService extends Service {
                                         lecturerName,
                                         postDate,
                                         expDate,
-                                        json.getString("is_urgent").equals("1")
+                                        false
                                 );
 
                                 // Add the announcement to the database
