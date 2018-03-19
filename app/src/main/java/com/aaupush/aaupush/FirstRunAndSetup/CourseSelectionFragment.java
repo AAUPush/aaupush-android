@@ -347,11 +347,12 @@ public class CourseSelectionFragment extends Fragment implements View.OnClickLis
         // Show progress bar
         view.findViewById(R.id.course_rv_progress_bar).setVisibility(View.VISIBLE);
 
+        // Get the department ID of the student
+        int departmentId = preferences.getInt(PushUtils.SP_DEPARTMENT_ID, 1);
+
         // Append GET parameters
         url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_SECTIONS_STUDY_FIELD_ID, studyFieldID + "", url);
-
-        // Get the year of the student
-        final int year = preferences.getInt(PushUtils.SP_SELECTED_YEAR, 1);
+        url = PushUtils.appendGetParameter(PushUtils.API_PARAMS_DEPARTMENT, String.valueOf(departmentId), url);
 
         final ArrayList<Object> sections = new ArrayList<>();
 
