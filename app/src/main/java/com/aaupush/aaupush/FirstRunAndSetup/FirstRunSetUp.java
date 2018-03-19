@@ -537,6 +537,7 @@ public class FirstRunSetUp extends Fragment implements AdapterView.OnItemSelecte
                                     // Save the section code and id
                                     editor.putString(PushUtils.SP_SECTION_CODE, jsonSection.getString("code"));
                                     editor.putInt(PushUtils.SP_SECTION_ID, jsonSection.getInt("id"));
+                                    editor.apply();
 
                                     // Set the section found flag to true
                                     isSectionFound = true;
